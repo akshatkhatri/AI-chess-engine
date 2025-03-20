@@ -21,5 +21,10 @@ A console-based chess game implemented in C++.
 - `king_check.cpp`: Functions related to checking the king's status.
 - `chessboard.cpp`: Display and manage the chessboard.
 
+## Pending Updates
+
+- AI engine enabling AI V/s AI or player V/s AI
+- Frontend UI using JS
+
 ## License
 MIT License
