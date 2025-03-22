@@ -22,12 +22,12 @@ int main()
     };
 
     std::unordered_map<char, std::string> chess_pieces = {
-        {'P', "♙"}, {'p', "♟"},  // White Pawn, Black Pawn
-        {'R', "♖"}, {'r', "♜"},  // White Rook, Black Rook
-        {'N', "♘"}, {'n', "♞"},  // White Knight, Black Knight
-        {'B', "♗"}, {'b', "♝"},  // White Bishop, Black Bishop
-        {'Q', "♕"}, {'q', "♛"},  // White Queen, Black Queen
-        {'K', "♔"}, {'k', "♚"}   // White King, Black King
+        {'p', "♙"}, {'P', "♟"},  // White Pawn, Black Pawn
+        {'r', "♖"}, {'R', "♜"},  // White Rook, Black Rook
+        {'n', "♘"}, {'N', "♞"},  // White Knight, Black Knight
+        {'b', "♗"}, {'B', "♝"},  // White Bishop, Black Bishop
+        {'q', "♕"}, {'Q', "♛"},  // White Queen, Black Queen
+        {'k', "♔"}, {'K', "♚"}   // White King, Black King
     };
 
     print_welcome_message();
