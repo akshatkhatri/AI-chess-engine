@@ -20,10 +20,10 @@ void print_welcome_message()
 void display_board(std::vector<std::vector<char>> &chess_board,std::unordered_map<char, std::string>&chess_pieces)
 {
     std::cout << "\n        0         1         2         3         4         5         6         7  \n";
-    std::cout << "    --------------------------------------------------------------------------------\n";
+    std::cout << "    -----------------------------------------------------------------------------------\n";
     for (int i = 0; i < 8; i++)
     {
-        std::cout << i << "  |"; // Row label
+        std::cout << 8 - i << " U  |"; // Row label according to UCN
         for (int j = 0; j < 8; j++)
         {
             if(chess_board[i][j]!='.')
@@ -31,8 +31,8 @@ void display_board(std::vector<std::vector<char>> &chess_board,std::unordered_ma
             else
                 std::cout<< "    "<<chess_board[i][j]<< "    |";
         }
-        std::cout << "  " << i; // Right-side row label
-        std::cout << "\n    --------------------------------------------------------------------------------\n";
+        std::cout << "  " << i; // Right-side row label For movement
+        std::cout << "\n    -----------------------------------------------------------------------------------\n";
     }
-    std::cout << "        0         1         2         3         4         5         6         7  \n";
+    std::cout << "          A         B         C         D         E         F         G         H  \n"; // Column Labels according to UCN
 }

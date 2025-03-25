@@ -1,6 +1,7 @@
 #include "movement.h"
 #include "chessboard.h"
 #include "king_check.h"
+#include "legalmoves.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -55,7 +56,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
             {
                 // Verifying Special Capture (En-Passant)
                 std::cout << "Checking For En-Passant" << std::endl;
-                if (!opponent_move_start.empty() && chess_board[opp_dest_i][opp_dest_j] == 'p' && opp_start_i == 1 && opp_dest_i == 3 && dest_j == opp_dest_j)
+                if (!opponent_move_start.empty() && chess_board[opp_dest_i][opp_dest_j] == 'p' && opp_start_i == 1 && opp_dest_i == 3 && dest_j == opp_dest_j && start_i == 3)
                 {
                     char vacant_spot = chess_board[dest_i][dest_j];
                     chess_board[start_i][start_j] = '.';
@@ -73,6 +74,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
                     std::cout << "En-Passant Move Executed" << std::endl;
                     return true;
                 }
+
                 // Verifying Simple Capture
                 if (chess_board[dest_i][dest_j] == '.' || isupper(chess_board[dest_i][dest_j]))
                 {
@@ -91,6 +93,19 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
                         chess_board[start_i][start_j] = 'P';
                         chess_board[dest_i][dest_j] = vacant_spot;
                         return false;
+                    }
+                    if (dest_i == 0) // Checking FOr pawn Promotion
+                    {
+                        std::cout << "Promotion Claimed" << std::endl;
+                        std::cout << "Select the piece you want to promote to (Q, R, B, N): ";
+                        char promotion_piece;
+                        std::cin >> promotion_piece;
+                        if (promotion_piece != 'Q' && promotion_piece != 'R' && promotion_piece != 'B' && promotion_piece != 'N')
+                        {
+                            std::cout << "Invalid promotion piece!" << std::endl;
+                            return false;
+                        }
+                        chess_board[dest_i][dest_j] = promotion_piece;
                     }
                     return true;
                 }
@@ -117,7 +132,19 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
                     chess_board[dest_i][dest_j] = vacant_spot;
                     return false;
                 }
-
+                if (dest_i == 0) // Checking For Pawn Promotion
+                {
+                    std::cout << "Promotion Claimed" << std::endl;
+                    std::cout << "Select the piece you want to promote to (Q, R, B, N): ";
+                    char promotion_piece;
+                    std::cin >> promotion_piece;
+                    if (promotion_piece != 'Q' && promotion_piece != 'R' && promotion_piece != 'B' && promotion_piece != 'N')
+                    {
+                        std::cout << "Invalid promotion piece!" << std::endl;
+                        return false;
+                    }
+                    chess_board[dest_i][dest_j] = promotion_piece;
+                }
                 return true; // ✅ Valid normal move
             }
 
@@ -149,7 +176,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
             {
                 // Verifying Special Capture (En-Passant)
                 std::cout << "Checking For En-Passant" << std::endl;
-                if (!opponent_move_start.empty() && chess_board[opp_dest_i][opp_dest_j] == 'P' && opp_start_i == 6 && opp_dest_i == 4 && dest_j == opp_dest_j)
+                if (!opponent_move_start.empty() && chess_board[opp_dest_i][opp_dest_j] == 'P' && opp_start_i == 6 && opp_dest_i == 4 && dest_j == opp_dest_j && start_i == 4)
                 {
                     char vacant_spot = chess_board[dest_i][dest_j];
                     chess_board[start_i][start_j] = '.';
@@ -187,6 +214,19 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
                         chess_board[dest_i][dest_j] = vacant_spot;
                         return false;
                     }
+                    if (dest_i == 7)
+                    {
+                        std::cout << "Promotion Claimed" << std::endl;
+                        std::cout << "Select the piece you want to promote to (q, r, b, n): ";
+                        char promotion_piece;
+                        std::cin >> promotion_piece;
+                        if (promotion_piece != 'q' && promotion_piece != 'r' && promotion_piece != 'b' && promotion_piece != 'n')
+                        {
+                            std::cout << "Invalid promotion piece!" << std::endl;
+                            return false;
+                        }
+                        chess_board[dest_i][dest_j] = promotion_piece;
+                    }
                     return true;
                 }
             }
@@ -211,6 +251,19 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
                     chess_board[start_i][start_j] = 'p';
                     chess_board[dest_i][dest_j] = vacant_spot;
                     return false;
+                }
+                if (dest_i == 7)
+                {
+                    std::cout << "Promotion Claimed" << std::endl;
+                    std::cout << "Select the piece you want to promote to (q, r, b, n): ";
+                    char promotion_piece;
+                    std::cin >> promotion_piece;
+                    if (promotion_piece != 'q' && promotion_piece != 'r' && promotion_piece != 'b' && promotion_piece != 'n')
+                    {
+                        std::cout << "Invalid promotion piece!" << std::endl;
+                        return false;
+                    }
+                    chess_board[dest_i][dest_j] = promotion_piece;
                 }
                 return true; // ✅ Valid normal move
             }
@@ -618,12 +671,12 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
                 chess_board[start_i][j] = '.';
                 chess_board[start_i][start_j] = piece;
             }
-            if (chess_board[start_i][1] != '.') // As Castling Above is only checking for > 1 
+            if (chess_board[start_i][1] != '.') // As Castling Above is only checking for > 1
             {
                 std::cout << "Can't Castle Piece in between" << std::endl;
                 return false;
             }
-            
+
             chess_board[dest_i][dest_j] = piece;
             chess_board[dest_i][dest_j + 1] = piece == 'K' ? 'R' : 'r';
             std::cout << "KingSide Castling SUccesful" << std::endl;
@@ -698,12 +751,12 @@ bool move_is_legal(std::vector<std::vector<char>> &chess_board, const std::strin
     char piece_to_move = chess_board[start_row][start_col];
     if (player_move_start == player_move_dest)
     {
-        std::cout << "Starting and Destination cannot be the same" << std::endl; // TO-DO
+        std::cout << "Starting and Destination cannot be the same" << std::endl;
         return false;
     }
     if (piece_to_move == '.')
     {
-        std::cout << "Invalid Move , Select A square with a piece" << std::endl; // Handling Errors TO-DO
+        std::cout << "Invalid Move , Select A square with a piece" << std::endl;
         return false;
     }
     if (player_color == 'W' && islower(piece_to_move))
@@ -731,11 +784,13 @@ bool move_is_legal(std::vector<std::vector<char>> &chess_board, const std::strin
 
 void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<char, std::string> &chess_pieces)
 {
-    std::string white_move_start, white_move_dest;
+    std::string white_move_start, white_move_dest; // Used Primarily for detecting En-Passant and keeping track of move order
     std::string black_move_start, black_move_dest;
     bool white_king_moved = false, black_king_moved = false; // Helps in Determining Castling Rights of the King
     bool white_rook_king_side_moved = false, white_rook_queen_side_moved = false;
     bool black_rook_king_side_moved = false, black_rook_queen_side_moved = false;
+
+    std::vector<std::string> moves_played_UCI; // For keeping individual moves in track in UCI format
 
     while (true) // Infinite loop until game ends
     {
@@ -748,21 +803,23 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
             if (white_move_start == "exit")
             {
                 std::cout << "WHite Resigned" << std::endl;
-                exit(1); // Exit condition
+                goto end; // Exit condition
             }
             std::cout << "♔ White's Turn: Pick the destination (Format: row,col): ";
             std::cin >> white_move_dest;
             if (white_move_dest == "exit")
             {
                 std::cout << "white resigned" << std::endl;
-                exit(1); // Exit condition
+                goto end; // Exit condition
             }
             if (move_is_legal(chess_board, white_move_start, white_move_dest, 'W', black_move_start, black_move_dest, white_king_moved, white_rook_king_side_moved, white_rook_queen_side_moved))
             {
                 std::cout << "✅ White's move executed successfully!\n";
                 if (!black_move_start.empty())
                     std::cout << "Black's Last Move was " << black_move_start << "TO " << black_move_dest << std::endl;
-                break; // Move was legal, break out of loop
+
+                moves_played_UCI.push_back(convert_indices_to_UCI(white_move_start, white_move_dest)); // Storing white's Move in Moves Played UCI
+                break;                                                                                 // Move was legal, break out of loop
             }
             std::cout << "⚠️  Illegal move! Try again.\n";
         }
@@ -777,23 +834,35 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
             if (black_move_start == "exit")
             {
                 std::cout << "Black Resigned" << std::endl;
-                exit(1);
+                goto end;
             }
             std::cout << "♚ Black's Turn: Pick the destination (Format: row,col): ";
             std::cin >> black_move_dest;
             if (black_move_dest == "exit")
             {
                 std::cout << "Black Resigned !" << std::endl;
-                exit(1);
+                goto end;
             }
             if (move_is_legal(chess_board, black_move_start, black_move_dest, 'B', white_move_start, white_move_dest, black_king_moved, black_rook_king_side_moved, black_rook_queen_side_moved))
             {
                 std::cout << "✅ Black's move executed successfully!\n";
                 if (!white_move_start.empty())
                     std::cout << "White's Last Move was " << white_move_start << "TO " << white_move_dest << std::endl;
-                break; // Move was legal, break out of loop
+
+                moves_played_UCI.push_back(convert_indices_to_UCI(black_move_start, black_move_dest)); // Storing black's Move in Moves Played UCI
+                break;                                                                                 // Move was legal, break out of loop
             }
             std::cout << "⚠️  Illegal move! Try again.\n";
         }
     }
+
+    end: // Label for ending execution
+
+    std::cout << "Moves Played IN UCI are" << std::endl;
+
+    for (int i = 0; i < moves_played_UCI.size(); i++)
+    {
+        std::cout << moves_played_UCI[i] << " ";
+    }
+    std::cout << std::endl;
 }

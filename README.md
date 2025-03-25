@@ -7,7 +7,7 @@ A console-based chess game implemented in C++.
 1. Clone the repository.
 2. Compile the C++ files:
    ```bash
-   g++ main.cpp movement.cpp king_check.cpp chessboard.cpp -o chess_game
+   g++ main.cpp movement.cpp king_check.cpp chessboard.cpp legalmoves.cpp notations.cpp -o chess_game
    ```
 3. Run the executable:
    ```bash
