@@ -2,6 +2,7 @@
 #include "chessboard.h"
 #include "king_check.h"
 #include "legalmoves.h"
+#include "notations.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -348,7 +349,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
             }
             else
             {
-                std::cout << "Fristd::endly Peace is on Destination" << std::endl;
+                std::cout << "Friendly Peace is on Destination" << std::endl;
                 return false;
             }
         }
@@ -865,4 +866,36 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
         std::cout << moves_played_UCI[i] << " ";
     }
     std::cout << std::endl;
-}
+
+    // std::cout << "Select Row and Col for the piece to select and generate legal moves for" << std::endl;
+    // int row;
+    // int col;
+
+    // std::cout << "Enter row\n";
+    // std::cin >> row;
+
+    // std::cout << "enter col \n";
+    // std::cin >> col;
+
+    // if(chess_board[row][col] == '.')
+    // {
+    //     std::cout << "select a piece\n";
+    //     exit(1);
+    // }
+
+    // char color = isupper(chess_board[row][col]) ? 'W' : 'B';
+    // std::vector<std::string> moves_generated = generate_legal_moves_for_a_piece(chess_board, color, row, col);
+    // std::cout << "Moves Generated are\n";
+
+    // for (int i = 0; i < moves_generated.size(); i++)
+    // {
+    //     std::cout << moves_generated[i] << std::endl;
+    // }
+
+    char player_color__;
+    std::cout << "Choose which side to print all legal moves for either 'W' Or 'B' \n";
+    std::cin >> player_color__;
+
+    int total_possible_moves = print_all_legal_moves_for_a_position(chess_board, player_color__,chess_pieces);
+    std::cout << "The Total Count of Possible Moves in the Position are -> " << total_possible_moves<< std::endl;
+    }

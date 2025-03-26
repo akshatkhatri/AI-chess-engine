@@ -2,6 +2,7 @@
 #include "chessboard.h"
 #include "movement.h"
 #include "king_check.h"
+#include "legalmoves.h"
 #include <vector>
 #include <unordered_map>
 
@@ -36,6 +37,14 @@ int main()
     };
 
     print_welcome_message();
+    unsigned long long int moves = 0;
+    int depth;
+    std::cout << "Enter Depth\n";
+    std::cin >> depth;
+
+    sample_perft_test(depth, chess_board, 1, moves);
+    std::cout << "Perft for depth " << depth << " is" << moves << std::endl;
+
     start_game(chess_board, chess_pieces);
 
     return 0;
