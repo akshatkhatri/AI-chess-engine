@@ -1,6 +1,6 @@
 # Chess Game
 
-A console-based chess game implemented in C++.
+A console-based Chess Engine implemented in C++, with plans to develop an AI-powered opponent.
 
 ## How to Run
 
@@ -16,10 +16,15 @@ A console-based chess game implemented in C++.
 
 ## Files
 
-- `main.cpp`: Main entry point of the game.
-- `movement.cpp`: Logic for moving the pieces and validating moves.
-- `king_check.cpp`: Functions related to checking the king's status.
-- `chessboard.cpp`: Display and manage the chessboard.
+- **main.cpp** – Main entry point of the game, handling user input and game flow.
+- **movement.cpp** – Implements logic for piece movement and move validation.
+- **king_check.cpp** – Contains functions for detecting check, checkmate, and stalemate.
+- **chessboard.cpp** – Manages board representation, piece placement, and display.
+- **legalmoves.cpp** – Generates all possible legal moves for each piece.
+- **notations.cpp** – Handles chess move notation conversion (e.g., algebraic notation).
+- **perft_results.txt** – Stores results of performance tests for move generation.
+- **perftsuite.epd** – Test suite of chess positions for verifying move generation accuracy.
+
 
 ## Pending Updates
 
