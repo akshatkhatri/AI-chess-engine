@@ -3,6 +3,7 @@
 #include "movement.h"
 #include "king_check.h"
 #include "legalmoves.h"
+#include "notations.h"
 #include <vector>
 #include <unordered_map>
 
@@ -27,6 +28,17 @@ int main()
         {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}  // 7
     };
 
+    std::vector<std::vector<char>> test_board = {
+        {'.', '.', '.', '.', 'k', '.', '.', '.'}, // 0
+        {'.', '.', '.', '.', '.', '.', '.', '.'}, // 1
+        {'.', '.', '.', '.', '.', '.', '.', '.'}, // 2
+        {'.', '.', '.', '.', '.', '.', '.', '.'}, // 3
+        {'.', '.', '.', '.', '.', '.', '.', '.'}, // 4
+        {'.', '.', '.', '.', '.', '.', '.', '.'}, // 5
+        {'.', '.', '.', '.', '.', '.', '.', '.'}, // 6
+        {'.', '.', '.', '.', 'K', '.', '.', 'R'}  // 7
+    };
+
     std::unordered_map<char, std::string> chess_pieces = {
         {'p', "♙"}, {'P', "♟"}, 
         {'r', "♖"}, {'R', "♜"}, 
@@ -36,16 +48,32 @@ int main()
         {'k', "♔"}, {'K', "♚"}
     };
 
-    print_welcome_message();
-    unsigned long long int moves = 0;
-    int depth;
-    std::cout << "Enter Depth\n";
-    std::cin >> depth;
+    // unsigned long long int moves = 0;
+    // int ep_moves = 0;
+    
+    // int depth;
+    // std::cout << "Enter Depth\n";
+    // std::cin >> depth;
+    
+    // sample_perft_test(depth, test_board, 1, moves,-1,-1,-1,-1,ep_moves,'w'); // Running for test_board not chess_board
+    // std::cout << "Perft for depth " << depth << " is" << moves << std::endl;
+    // std::cout<<"En-passant moves were "<<ep_moves<<std::endl;
 
-    sample_perft_test(depth, chess_board, 1, moves);
-    std::cout << "Perft for depth " << depth << " is" << moves << std::endl;
 
-    start_game(chess_board, chess_pieces);
+    perfsuite_file_test(chess_pieces);
+    
+    std::cout<<"Press Enter To continue"<<std::endl;
+    getchar();
+
+    /*
+    
+    CAUTION !! CAUTION !! CAUTION !!
+    UNCOMMENT THE BELOW LINES TO START THE GAME
+    
+    */
+//     std::cout<<king_in_check(test_board,'W')<<std::endl;
+//    print_welcome_message();
+//     start_game(test_board, chess_pieces); // Uncomment this line to Start The Game and set test_board to chess_board
 
     return 0;
 }

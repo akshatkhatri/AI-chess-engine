@@ -8,52 +8,230 @@
 // TO-DO
 
 // unsigned long long int moves = 0; // Move Tracker
-long long int depth2_moves = 0;
+// long long int depth2_moves = 0;
+bool white_king_moved = false;
+bool white_king_side_rook_moved = false;
+bool white_queen_side_rook_moved = false;
+bool black_king_moved = false;
+bool black_king_side_rook_moved = false;
+bool black_queen_side_rook_moved = false;
 
-void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_board, int curr_depth, unsigned long long int &moves)
+void set_castling_rights(const std::string &castling_rights)
+{
+    // Reset all castling rights
+    white_king_moved = true;
+    white_king_side_rook_moved = true;
+    white_queen_side_rook_moved = true;
+    black_king_moved = true;
+    black_king_side_rook_moved = true;
+    black_queen_side_rook_moved = true;
+
+    for (char c : castling_rights)
+    {
+        switch (c)
+        {
+        case 'K':
+            white_king_moved = false;
+            white_king_side_rook_moved = false;
+            break;
+        case 'Q':
+            white_king_moved = false;
+            white_queen_side_rook_moved = false;
+            break;
+        case 'k':
+            black_king_moved = false;
+            black_king_side_rook_moved = false;
+            break;
+        case 'q':
+            black_king_moved = false;
+            black_queen_side_rook_moved = false;
+            break;
+        }
+    }
+}
+
+void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_board, int curr_depth, unsigned long long int &moves, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, int &ep_moves, char player_turn)
 {
     if (curr_depth > target_depth) // Base Case
     {
         return;
     }
+    // Backup castling rights before this move
+    bool wkm = white_king_moved;
+    bool wksrm = white_king_side_rook_moved;
+    bool wqsrm = white_queen_side_rook_moved;
+    bool bkm = black_king_moved;
+    bool bksrm = black_king_side_rook_moved;
+    bool bqsrm = black_queen_side_rook_moved;
 
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            char current_turn = curr_depth % 2 == 1 ? 'W' : 'B';
             char curr_square = chess_board[i][j];
+            char current_turn = (player_turn == 'w') ? 'W' : 'B';
 
             if (curr_square == '.' || (current_turn == 'W' && islower(curr_square)) || (current_turn == 'B' && isupper(curr_square)))
             {
                 continue;
             }
-            std::vector<std::string> piece_moves = generate_legal_moves_for_a_piece(chess_board, current_turn, i, j);
+            std::vector<std::string> piece_moves = generate_legal_moves_for_a_piece(chess_board, current_turn, i, j, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j, white_king_moved, white_king_side_rook_moved, white_queen_side_rook_moved, black_king_moved, black_king_side_rook_moved, black_queen_side_rook_moved);
 
-                for (int k = 0; k < piece_moves.size(); k++)
+            for (int k = 0; k < piece_moves.size(); k++)
+            {
+                int new_row = piece_moves[k][0] - '0'; // Convert char to int
+                int new_col = piece_moves[k][2] - '0'; // Convert char to int
+
+                char piece = chess_board[i][j];
+                char temp = chess_board[new_row][new_col];
+
+                // //debug line
+                // std::cout << "Checking Move: " << piece << " (" << i << "," << j << ") to (" << new_row << "," << new_col << ")" << std::endl;
+
+                chess_board[new_row][new_col] = piece;
+                chess_board[i][j] = '.';
+                char temp2;
+                char temp_castle;
+
+                // enapassant move making logic
+                if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'e' && piece_moves[k][4] == 'p')
                 {
-                    int new_row = piece_moves[k][0] - '0'; // Convert char to int
-                    int new_col = piece_moves[k][2] - '0'; // Convert char to int
+                    // temp2 = current_turn == 'W' ? chess_board[new_row + 1][new_col] : chess_board[new_row - 1][new_col];
+                    if (current_turn == 'W')
+                    {
+                        temp2 = chess_board[new_row + 1][new_col];
+                        chess_board[new_row + 1][new_col] = '.';
+                    }
+                    else
+                    {
+                        temp2 = chess_board[new_row - 1][new_col];
+                        chess_board[new_row - 1][new_col] = '.';
+                    }
 
-                    char piece = chess_board[i][j];
-                    char temp = chess_board[new_row][new_col];
-
-                    chess_board[new_row][new_col] = piece;
-                    chess_board[i][j] = '.';
-
-                    if(curr_depth == target_depth)
-                        moves++;
-
-                    sample_perft_test(target_depth, chess_board, curr_depth + 1, moves);
-
-                    chess_board[new_row][new_col] = temp;
-                    chess_board[i][j] = piece;
+                    ep_moves++;
                 }
+                // Castling Move Making Logic
+                if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'c' && (piece_moves[k][4] == 'k' || piece_moves[k][4] == 'q'))
+                {
+                    if (current_turn == 'W')
+                    {
+                        if (piece_moves[k][4] == 'k') // Kingside Castle
+                        {
+                            chess_board[7][7] = '.';
+                            chess_board[new_row][new_col - 1] = 'R';
+                        }
+                        else // Queenside Castle
+                        {
+                            chess_board[7][0] = '.';
+                            chess_board[new_row][new_col + 1] = 'R';
+                        }
+                    }
+                    else
+                    {
+                        if (piece_moves[k][4] == 'k') // Kingside Castle
+                        {
+                            chess_board[0][7] = '.';
+                            chess_board[new_row][new_col - 1] = 'r';
+                        }
+                        else // Queenside Castle
+                        {
+                            chess_board[0][0] = '.';
+                            chess_board[new_row][new_col + 1] = 'r';
+                        }
+                    }
+                }
+
+                // Handle Castling Updates
+                if (piece == 'K')
+                {
+                    if (current_turn == 'W')
+                        white_king_moved = true;
+                    else
+                        black_king_moved = true;
+                }
+                if (piece == 'R')
+                {
+                    if (current_turn == 'W')
+                    {
+                        if (i == 7 && j == 0)
+                            white_queen_side_rook_moved = true;
+                        if (i == 7 && j == 7)
+                            white_king_side_rook_moved = true;
+                    }
+                    else
+                    {
+                        if (i == 0 && j == 0)
+                            black_queen_side_rook_moved = true;
+                        if (i == 0 && j == 7)
+                            black_king_side_rook_moved = true;
+                    }
+                }
+
+                if (curr_depth == target_depth)
+                    moves++;
+
+                // if (curr_depth == 1) // Debug Line
+                // {
+                //     std::cout << "\nMove #" << moves << ": " << piece << " from (" << i << "," << j << ") to (" << new_row << "," << new_col << ")" << std::endl<<std::endl;
+                // }
+
+                sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w');
+
+                chess_board[new_row][new_col] = temp;
+                chess_board[i][j] = piece;
+
+                // Enpassant Move Unmaking Logic
+                if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'e' && piece_moves[k][4] == 'p')
+                {
+                    if (current_turn == 'W')
+                        chess_board[new_row + 1][new_col] = temp2;
+                    else
+                        chess_board[new_row - 1][new_col] = temp2;
+                }
+
+                // Castling Move Unmaking Logic
+                if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'c' && (piece_moves[k][4] == 'k' || piece_moves[k][4] == 'q'))
+                {
+                    if (current_turn == 'W')
+                    {
+                        if (piece_moves[k][4] == 'k') // Kingside Castle
+                        {
+                            chess_board[7][7] = 'R';
+                            chess_board[new_row][new_col - 1] = '.';
+                        }
+                        else // Queenside Castle
+                        {
+                            chess_board[7][0] = 'R';
+                            chess_board[new_row][new_col + 1] = '.';
+                        }
+                    }
+                    else
+                    {
+                        if (piece_moves[k][4] == 'k') // Kingside Castle
+                        {
+                            chess_board[0][7] = 'r';
+                            chess_board[new_row][new_col - 1] = '.';
+                        }
+                        else // Queenside Castle
+                        {
+                            chess_board[0][0] = 'r';
+                            chess_board[new_row][new_col + 1] = '.';
+                        }
+                    }
+                }
+
+                white_king_moved = wkm;
+                white_king_side_rook_moved = wksrm;
+                white_queen_side_rook_moved = wqsrm;
+                black_king_moved = bkm;
+                black_king_side_rook_moved = bksrm;
+                black_queen_side_rook_moved = bqsrm;
+            }
         }
     }
 }
 
-std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vector<char>> &chess_board, char player_color, int row, int col)
+std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vector<char>> &chess_board, char player_color, int row, int col, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, bool &white_king_moved, bool &white_king_side_rook_moved, bool &white_queen_side_rook_moved, bool &black_king_moved, bool &black_king_side_rook_moved, bool &black_queen_side_rook_moved)
 {
     char piece = chess_board[row][col];
     std::vector<std::string> moves_generated;
@@ -112,98 +290,67 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
             }
         }
 
+        // en-passant logic
+        if (opp_move_dest_i != -1) // If its game's first move
+        {
+
+            if (piece == 'P' && row == 3 && chess_board[opp_move_dest_i][opp_move_dest_j] == 'p' && opp_move_start_i == 1 && opp_move_dest_i == 3 &&
+                (col == opp_move_dest_j - 1 || col == opp_move_dest_j + 1) && is_legal_after_move(chess_board, row, col, opp_move_dest_i - 1, opp_move_dest_j, player_color))
+            {
+                moves_generated.push_back(std::to_string(opp_move_dest_i - 1) + "," + std::to_string(opp_move_dest_j) + "ep");
+            }
+
+            if (piece == 'p' && row == 4 && chess_board[opp_move_dest_i][opp_move_dest_j] == 'P' && opp_move_start_i == 6 && opp_move_dest_i == 4 &&
+                (col == opp_move_dest_j - 1 || col == opp_move_dest_j + 1) && is_legal_after_move(chess_board, row, col, opp_move_dest_i + 1, opp_move_dest_j, player_color))
+            {
+                moves_generated.push_back(std::to_string(opp_move_dest_i + 1) + "," + std::to_string(opp_move_dest_j) + "ep");
+            }
+        }
+
         /*
-
-        Pending En-Passant and Promotion Logic
-
+        Pending Promotion Logic
         */
     }
 
     // Rooks
     if (piece == 'R' || piece == 'r')
     {
-        // Upward movement for Rook
-        for (int k = row - 1; k >= 0; k--)
+        // Possible move directions for Rook
+        int directions[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // Up, Down, Left, Right
+
+        for (auto &dir : directions)
         {
-            if (chess_board[k][col] != '.' && ((player_color == 'W' && isupper(chess_board[k][col])) || (player_color == 'B' && islower(chess_board[k][col]))))
+            int k = row + dir[0], l = col + dir[1];
+
+            while (k >= 0 && k < 8 && l >= 0 && l < 8)
             {
-                // Friendly piece encountered, stop
-                break;
+                if (chess_board[k][l] != '.')
+                {
+                    // If friendly piece, stop
+                    if ((player_color == 'W' && isupper(chess_board[k][l])) || (player_color == 'B' && islower(chess_board[k][l])))
+                    {
+                        break;
+                    }
+
+                    // If opposition piece, check legality, capture & stop
+                    if (is_legal_after_move(chess_board, row, col, k, l, player_color))
+                    {
+                        moves_generated.push_back(std::to_string(k) + "," + std::to_string(l));
+                    }
+                    break;
+                }
+
+                if (is_legal_after_move(chess_board, row, col, k, l, player_color))
+                {
+                    moves_generated.push_back(std::to_string(k) + "," + std::to_string(l));
+                }
+
+                k += dir[0];
+                l += dir[1];
             }
-
-            if (chess_board[k][col] != '.' && ((player_color == 'W' && islower(chess_board[k][col])) || (player_color == 'B' && isupper(chess_board[k][col]))))
-            {
-                // Opposition piece encountered, capture & stop
-                if (is_legal_after_move(chess_board, row, col, k, col, player_color))
-                    moves_generated.push_back(std::to_string(k) + "," + std::to_string(col)); // Add move
-
-                break;
-            }
-            if (is_legal_after_move(chess_board, row, col, k, col, player_color))
-                moves_generated.push_back(std::to_string(k) + "," + std::to_string(col)); // Add move
-        }
-
-        // Down
-        for (int k = row + 1; k < 8; k++)
-        {
-            if (chess_board[k][col] != '.' && ((player_color == 'W' && isupper(chess_board[k][col])) || (player_color == 'B' && islower(chess_board[k][col]))))
-            {
-                // Friendly piece encountered, stop
-                break;
-            }
-
-            if (chess_board[k][col] != '.' && ((player_color == 'W' && islower(chess_board[k][col])) || (player_color == 'B' && isupper(chess_board[k][col]))))
-            {
-                // Opposition piece encountered, capture & stop
-                if (is_legal_after_move(chess_board, row, col, k, col, player_color))
-                    moves_generated.push_back(std::to_string(k) + "," + std::to_string(col)); // Add move
-
-                break;
-            }
-            if (is_legal_after_move(chess_board, row, col, k, col, player_color))
-                moves_generated.push_back(std::to_string(k) + "," + std::to_string(col)); // Add move
-        }
-        // Left
-        for (int k = col - 1; k >= 0; k--)
-        {
-            if (chess_board[row][k] != '.' && ((player_color == 'W' && isupper(chess_board[row][k])) || (player_color == 'B' && islower(chess_board[row][k]))))
-            {
-                // Friendly piece encountered, stop
-                break;
-            }
-
-            if (chess_board[row][k] != '.' && ((player_color == 'W' && islower(chess_board[row][k])) || (player_color == 'B' && isupper(chess_board[row][k]))))
-            {
-                // Opposition piece encountered, capture & stop
-                if (is_legal_after_move(chess_board, row, col, row, k, player_color))
-                    moves_generated.push_back(std::to_string(row) + "," + std::to_string(k)); // Add move
-
-                break;
-            }
-            if (is_legal_after_move(chess_board, row, col, row, k, player_color))
-                moves_generated.push_back(std::to_string(row) + "," + std::to_string(k)); // Add move
-        }
-        // Right
-        for (int k = col + 1; k < 8; k++)
-        {
-            if (chess_board[row][k] != '.' && ((player_color == 'W' && isupper(chess_board[row][k])) || (player_color == 'B' && islower(chess_board[row][k]))))
-            {
-                // Friendly piece encountered, stop
-                break;
-            }
-
-            if (chess_board[row][k] != '.' && ((player_color == 'W' && islower(chess_board[row][k])) || (player_color == 'B' && isupper(chess_board[row][k]))))
-            {
-                // Opposition piece encountered, capture & stop
-                if (is_legal_after_move(chess_board, row, col, row, k, player_color))
-                    moves_generated.push_back(std::to_string(row) + "," + std::to_string(k)); // Add move
-
-                break;
-            }
-            if (is_legal_after_move(chess_board, row, col, row, k, player_color))
-                moves_generated.push_back(std::to_string(row) + "," + std::to_string(k)); // Add move
         }
     }
+
     // Bishop Optimized
     if (piece == 'B' || piece == 'b')
     {
@@ -320,18 +467,47 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
                 if (piece_at_pos == '.' || (player_color == 'W' && islower(piece_at_pos)) || (player_color == 'B' && isupper(piece_at_pos)))
                 {
                     if (is_legal_after_move(chess_board, row, col, k, l, player_color))
+                    {
                         moves_generated.push_back(std::to_string(k) + "," + std::to_string(l)); // Add valid move.
+                    }
                 }
             }
         }
-    }
 
+        if ((player_color == 'W' && !white_king_moved) || (player_color == 'B' && !black_king_moved))
+        {
+            int back_rank = (player_color == 'W') ? 7 : 0; // White's back rank is 7, Black's is 0
+
+            // King-side castling (O-O)
+            if (((player_color == 'W' && !white_king_side_rook_moved) || (player_color == 'B' && !black_king_side_rook_moved)) &&
+                chess_board[back_rank][5] == '.' && chess_board[back_rank][6] == '.' && ((player_color == 'W' && chess_board[back_rank][7] == 'R') || (player_color == 'B' && chess_board[back_rank][7] == 'r')) &&
+                !(king_in_check(chess_board, player_color)) &&
+                is_legal_after_move(chess_board, row, col, back_rank, 5, player_color) &&
+                is_legal_after_move(chess_board, row, col, back_rank, 6, player_color))
+            {
+                moves_generated.push_back(std::to_string(back_rank) + ",6" + "ck"); // King moves to g-file
+            }
+
+            // Queen-side castling (O-O-O)
+            if (((player_color == 'W' && !white_queen_side_rook_moved) || (player_color == 'B' && !black_queen_side_rook_moved)) &&
+                chess_board[back_rank][1] == '.' && chess_board[back_rank][2] == '.' && chess_board[back_rank][3] == '.' && ((player_color == 'W' && chess_board[back_rank][0] == 'R') || (player_color == 'B' && chess_board[back_rank][0] == 'r')) &&
+                !(king_in_check(chess_board, player_color)) &&
+                is_legal_after_move(chess_board, row, col, back_rank, 2, player_color) &&
+                is_legal_after_move(chess_board, row, col, back_rank, 3, player_color))
+            {
+                moves_generated.push_back(std::to_string(back_rank) + ",2" + "cq"); // King moves to c-file
+            }
+        }
+    }
     return moves_generated; // Returns all valid moves for that piece as a vector<string>
 }
+
+// Under Development
 
 int print_all_legal_moves_for_a_position(std::vector<std::vector<char>> &chess_board, char player_color, std::unordered_map<char, std::string> &chess_pieces)
 {
     long long int total_moves = 0; // Stores the number of possible Move variations of every piece combined
+    int ep_moves = 0;
 
     std::cout << "Printing all Legal Moves in the position piece by piece\n";
     for (int i = 0; i < 8; i++)
@@ -340,7 +516,7 @@ int print_all_legal_moves_for_a_position(std::vector<std::vector<char>> &chess_b
         {
             if (chess_board[i][j] != '.' && player_color == 'W' && isupper(chess_board[i][j]))
             {
-                std::vector<std::string> moves = generate_legal_moves_for_a_piece(chess_board, 'W', i, j); // Extracting Valid moves Per piece
+                std::vector<std::string> moves = generate_legal_moves_for_a_piece(chess_board, 'W', i, j, -1, -1, -1, -1, white_king_moved, white_king_side_rook_moved, white_queen_side_rook_moved, black_king_moved, black_king_side_rook_moved, black_queen_side_rook_moved); // Extracting Valid moves Per piece
                 std::cout << chess_pieces[chess_board[i][j]] << " At Position " << (char)('A' + j) << 8 - i << " is -> ";
 
                 total_moves += moves.size(); // Counting all Moves
@@ -358,7 +534,7 @@ int print_all_legal_moves_for_a_position(std::vector<std::vector<char>> &chess_b
 
             if (chess_board[i][j] != '.' && player_color == 'B' && islower(chess_board[i][j]))
             {
-                std::vector<std::string> moves = generate_legal_moves_for_a_piece(chess_board, 'B', i, j); // Extracting Valid moves Per piece
+                std::vector<std::string> moves = generate_legal_moves_for_a_piece(chess_board, 'B', i, j, -1, -1, -1, -1, white_king_moved, white_king_side_rook_moved, white_queen_side_rook_moved, black_king_moved, black_king_side_rook_moved, black_queen_side_rook_moved); // Extracting Valid moves Per piece
                 std::cout << chess_pieces[chess_board[i][j]] << " At Position " << (char)('A' + j) << 8 - i << " is -> ";
 
                 total_moves += moves.size(); // Counting all moves

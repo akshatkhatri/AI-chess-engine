@@ -128,32 +128,58 @@ bool bishop_queen_attack(int i, int j, char king, std::vector<std::vector<char>>
     return false;
 }
 
-bool pawn_attack(int i, int j, char king, std::vector<std::vector<char>> &board)
-{
-    char pawn = (king == 'W') ? 'p' : 'P';
+bool pawn_attack(int i, int j, char king, std::vector<std::vector<char>> &board) {
+    // Determine the enemy pawn
+    char enemy_pawn = (king == 'W') ? 'p' : 'P';
+    
+    // Direction of attack: Black pawns move up (-1), White pawns move down (+1)
+    int direction = (enemy_pawn == 'p') ? -1 : 1; 
+    
+    int new_i = i + direction; // Row where pawn attacks
 
-    if (pawn == 'P')
-    {
-        if (i > 0)
-        {
-            if ((j > 0 && board[i - 1][j - 1] == pawn) || (j < 7 && board[i - 1][j + 1] == pawn))
-            {
-                return true;
-            }
+    // Check if within board limits
+    if (new_i >= 0 && new_i < 8) {
+        if ((j > 0 && board[new_i][j - 1] == enemy_pawn) || 
+            (j < 7 && board[new_i][j + 1] == enemy_pawn)) {
+            return true; // King is under attack
         }
     }
-    else
-    {
-        if (i < 7)
-        {
-            if ((j > 0 && board[i + 1][j - 1] == pawn) || (j < 7 && board[i + 1][j + 1] == pawn))
-            {
-                return true;
-            }
-        }
-    }
-    return false;
+    
+    return false; // No attack found
 }
+
+
+//Logically this thing is never true but when generating moves , we have to check this
+
+bool king_attack(int i, int j, char king, std::vector<std::vector<char>> &board)
+{
+    char opp_king = (king == 'W') ? 'k' : 'K';
+
+    // Possible king moves (one step in all 8 directions)
+    int moves[8][2] = {
+        {-1, -1}, {-1, 0}, {-1, 1}, // Top-left, Top, Top-right
+        {0, -1},          {0, 1},   // Left, Right
+        {1, -1}, {1, 0}, {1, 1}     // Bottom-left, Bottom, Bottom-right
+    };
+
+    for (int k = 0; k < 8; k++)
+    {
+        int new_i = i + moves[k][0];
+        int new_j = j + moves[k][1];
+
+        // Check if within bounds
+        if (new_i >= 0 && new_i < 8 && new_j >= 0 && new_j < 8)
+        {
+            // Check if the opponent's king is in an adjacent square
+            if (board[new_i][new_j] == opp_king)
+            {
+                return true; // The king is under attack
+            }
+        }
+    }
+    return false; // The king is not under attack by the opponent's king
+}
+
 
 bool king_in_check(std::vector<std::vector<char>> &chess_board, char turn_color)
 {
@@ -165,7 +191,7 @@ bool king_in_check(std::vector<std::vector<char>> &chess_board, char turn_color)
         {
             if (chess_board[i][j] == king_symbol)
             {
-                return knight_attack(i, j, king_to_check, chess_board) || rook_queen_attack(i, j, king_to_check, chess_board) || bishop_queen_attack(i, j, king_to_check, chess_board) || pawn_attack(i, j, king_to_check, chess_board);
+                return knight_attack(i, j, king_to_check, chess_board) || rook_queen_attack(i, j, king_to_check, chess_board) || bishop_queen_attack(i, j, king_to_check, chess_board) || pawn_attack(i, j, king_to_check, chess_board) || king_attack(i,j,king_to_check,chess_board);
             }
         }
     }

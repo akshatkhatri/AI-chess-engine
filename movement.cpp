@@ -892,6 +892,9 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
     //     std::cout << moves_generated[i] << std::endl;
     // }
 
+
+
+
     char player_color__;
     std::cout << "Choose which side to print all legal moves for either 'W' Or 'B' \n";
     std::cin >> player_color__;
