@@ -42,20 +42,20 @@ int main()
     std::unordered_map<char, std::string> chess_pieces = {
         {'p', "♙"}, {'P', "♟"}, {'r', "♖"}, {'R', "♜"}, {'n', "♘"}, {'N', "♞"}, {'b', "♗"}, {'B', "♝"}, {'q', "♕"}, {'Q', "♛"}, {'k', "♔"}, {'K', "♚"}};
 
-    // unsigned long long int moves = 0;
-    // int ep_moves = 0;
+    unsigned long long int moves = 0;
+    int ep_moves = 0;
 
-    // int depth;
-    // std::cout << "Enter Depth\n";
-    // std::cin >> depth;
+    int depth;
+    std::cout << "Enter Depth\n";
+    std::cin >> depth;
 
-    // sample_perft_test(depth, test_board, 1, moves,-1,-1,-1,-1,ep_moves,'w'); // Running for test_board not chess_board
-    // std::cout << "Perft for depth " << depth << " is" << moves << std::endl;
-    // std::cout<<"En-passant moves were "<<ep_moves<<std::endl;
+    sample_perft_test(depth, chess_board, 1, moves,-1,-1,-1,-1,ep_moves,'w'); // Running for test_board not chess_board
+    std::cout << "Perft for depth " << depth << " is" << moves << std::endl;
+    std::cout<<"En-passant moves were "<<ep_moves<<std::endl;
 
-    perfsuite_file_test(chess_pieces);
-    std::cout<<"Press Enter To continue"<<std::endl;
-    getchar();
+    // perfsuite_file_test(chess_pieces);
+    // std::cout<<"Press Enter To continue"<<std::endl;
+    // getchar();
 
     // int target_depth = 5;
     // unsigned long long int total_moves = 0;
