@@ -90,7 +90,7 @@ void perfsuite_file_test(std::unordered_map<char, std::string> &chess_pieces)
         std::string board_rep;
         char player_turn;
         std::string castling_rights;
-        std::vector<int> filtered_perft_results;
+        std::vector<long long int> filtered_perft_results;
 
         int i = 0;
         while (i < line.size() && line[i] != ' ')
@@ -122,7 +122,7 @@ void perfsuite_file_test(std::unordered_map<char, std::string> &chess_pieces)
         { // Read each token
             if (isdigit(token[0]))
             { // If token starts with a digit
-                filtered_perft_results.push_back(stoi(token));
+                filtered_perft_results.push_back(std::stoll(token));
             }
         }
 
@@ -132,7 +132,7 @@ void perfsuite_file_test(std::unordered_map<char, std::string> &chess_pieces)
     }
 }
 
-void compare_perft_results(std::string &board_rep, char player_turn, std::string &castling_rights, std::vector<int> &filtered_perft_results, std::unordered_map<char, std::string> &chess_pieces, int test_count)
+void compare_perft_results(std::string &board_rep, char player_turn, std::string &castling_rights, std::vector<long long int> &filtered_perft_results, std::unordered_map<char, std::string> &chess_pieces, int test_count)
 {
     unsigned long long int moves = 0; // Stores Moves passed as reference to perft test
     int ep_moves = 0;
@@ -144,7 +144,7 @@ void compare_perft_results(std::string &board_rep, char player_turn, std::string
 
     set_castling_rights(castling_rights);                           // Initialized Castling Rights in Move generator
 
-    for (int depth = 1; depth <= 5; depth++)
+    for (int depth = 1; depth <= 6; depth++)
     {
         sample_perft_test(depth, chess_board, 1, moves, -1, -1, -1, -1, ep_moves, player_turn);
         my_perft_results.push_back(moves);

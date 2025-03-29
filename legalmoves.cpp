@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+
 // TO-DO
 
 // unsigned long long int moves = 0; // Move Tracker
@@ -50,6 +51,197 @@ void set_castling_rights(const std::string &castling_rights)
     }
 }
 
+void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board, int curr_depth, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, int &ep_moves, char player_turn)
+{
+    if (curr_depth > target_depth)
+    {
+        return;
+    }
+
+    // Backup castling rights before this move
+    bool wkm = white_king_moved;
+    bool wksrm = white_king_side_rook_moved;
+    bool wqsrm = white_queen_side_rook_moved;
+    bool bkm = black_king_moved;
+    bool bksrm = black_king_side_rook_moved;
+    bool bqsrm = black_queen_side_rook_moved;
+
+    unsigned long long total_positions = 0;
+
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            char curr_square = chess_board[i][j];
+            char current_turn = (player_turn == 'w') ? 'W' : 'B';
+
+            if (curr_square == '.' || (current_turn == 'W' && islower(curr_square)) || (current_turn == 'B' && isupper(curr_square)))
+            {
+                continue;
+            }
+
+            std::vector<std::string> piece_moves = generate_legal_moves_for_a_piece(chess_board, current_turn, i, j, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j, white_king_moved, white_king_side_rook_moved, white_queen_side_rook_moved, black_king_moved, black_king_side_rook_moved, black_queen_side_rook_moved);
+
+            for (int k = 0; k < piece_moves.size(); k++)
+            {
+                int new_row = piece_moves[k][0] - '0';
+                int new_col = piece_moves[k][2] - '0';
+
+                char piece = chess_board[i][j];
+                char temp = chess_board[new_row][new_col];
+
+                chess_board[new_row][new_col] = piece;
+                chess_board[i][j] = '.';
+                char temp2;
+
+                // En passant handling
+                if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'e' && piece_moves[k][4] == 'p')
+                {
+                    if (current_turn == 'W')
+                    {
+                        temp2 = chess_board[new_row + 1][new_col];
+                        chess_board[new_row + 1][new_col] = '.';
+                    }
+                    else
+                    {
+                        temp2 = chess_board[new_row - 1][new_col];
+                        chess_board[new_row - 1][new_col] = '.';
+                    }
+                    ep_moves++;
+                }
+
+                // Castling handling
+                if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'c' && (piece_moves[k][4] == 'k' || piece_moves[k][4] == 'q'))
+                {
+                    if (current_turn == 'W')
+                    {
+                        if (piece_moves[k][4] == 'k')
+                        {
+                            chess_board[7][7] = '.';
+                            chess_board[new_row][new_col - 1] = 'R';
+                        }
+                        else
+                        {
+                            chess_board[7][0] = '.';
+                            chess_board[new_row][new_col + 1] = 'R';
+                        }
+                    }
+                    else
+                    {
+                        if (piece_moves[k][4] == 'k')
+                        {
+                            chess_board[0][7] = '.';
+                            chess_board[new_row][new_col - 1] = 'r';
+                        }
+                        else
+                        {
+                            chess_board[0][0] = '.';
+                            chess_board[new_row][new_col + 1] = 'r';
+                        }
+                    }
+                }
+
+                // Castling update
+                if (piece == 'K')
+                {
+                    if (current_turn == 'W')
+                        white_king_moved = true;
+                    else
+                        black_king_moved = true;
+                }
+                if (piece == 'R')
+                {
+                    if (current_turn == 'W')
+                    {
+                        if (i == 7 && j == 0)
+                            white_queen_side_rook_moved = true;
+                        if (i == 7 && j == 7)
+                            white_king_side_rook_moved = true;
+                    }
+                    else
+                    {
+                        if (i == 0 && j == 0)
+                            black_queen_side_rook_moved = true;
+                        if (i == 0 && j == 7)
+                            black_king_side_rook_moved = true;
+                    }
+                }
+
+                // Count positions for this move
+                unsigned long long move_count = 0;
+                sample_perft_test(target_depth, chess_board, curr_depth + 1, move_count, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w');
+
+                // Print the perft count for this move
+                if (curr_depth == 1)
+                {
+                    std::string move_start = std::to_string(i) + "," + std::to_string(j);
+                    std::string move_dest = std::to_string(new_row) + "," + std::to_string(new_col);
+
+                    std::string uci_move = convert_indices_to_UCI(move_start, move_dest);
+
+                    std::cout << uci_move << ": " << move_count << std::endl;
+                }
+
+                total_positions += move_count;
+
+                // Undo the move
+                chess_board[new_row][new_col] = temp;
+                chess_board[i][j] = piece;
+
+                if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'e' && piece_moves[k][4] == 'p')
+                {
+                    if (current_turn == 'W')
+                        chess_board[new_row + 1][new_col] = temp2;
+                    else
+                        chess_board[new_row - 1][new_col] = temp2;
+                }
+
+                if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'c' && (piece_moves[k][4] == 'k' || piece_moves[k][4] == 'q'))
+                {
+                    if (current_turn == 'W')
+                    {
+                        if (piece_moves[k][4] == 'k')
+                        {
+                            chess_board[7][7] = 'R';
+                            chess_board[new_row][new_col - 1] = '.';
+                        }
+                        else
+                        {
+                            chess_board[7][0] = 'R';
+                            chess_board[new_row][new_col + 1] = '.';
+                        }
+                    }
+                    else
+                    {
+                        if (piece_moves[k][4] == 'k')
+                        {
+                            chess_board[0][7] = 'r';
+                            chess_board[new_row][new_col - 1] = '.';
+                        }
+                        else
+                        {
+                            chess_board[0][0] = 'r';
+                            chess_board[new_row][new_col + 1] = '.';
+                        }
+                    }
+                }
+
+                white_king_moved = wkm;
+                white_king_side_rook_moved = wksrm;
+                white_queen_side_rook_moved = wqsrm;
+                black_king_moved = bkm;
+                black_king_side_rook_moved = bksrm;
+                black_queen_side_rook_moved = bqsrm;
+            }
+        }
+    }
+
+    if (curr_depth == 1)
+    {
+        std::cout << "Total positions: " << total_positions << std::endl;
+    }
+}
+
 void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_board, int curr_depth, unsigned long long int &moves, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, int &ep_moves, char player_turn)
 {
     if (curr_depth > target_depth) // Base Case
@@ -79,8 +271,9 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
 
             for (int k = 0; k < piece_moves.size(); k++)
             {
-                int new_row = piece_moves[k][0] - '0'; // Convert char to int
-                int new_col = piece_moves[k][2] - '0'; // Convert char to int
+                // std::vector<std::vector<char>> temp_board = chess_board; // Debug Line
+                int new_row = piece_moves[k][0] - '0';                   // Convert char to int
+                int new_col = piece_moves[k][2] - '0';                   // Convert char to int
 
                 char piece = chess_board[i][j];
                 char temp = chess_board[new_row][new_col];
@@ -142,23 +335,24 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                 }
 
                 // Handle Castling Updates
-                if (piece == 'K')
+                if (piece == 'K' || piece == 'k') // Check for both kings
                 {
-                    if (current_turn == 'W')
+                    if (piece == 'K') // White King
                         white_king_moved = true;
-                    else
+                    else if (piece == 'k') // Black King
                         black_king_moved = true;
                 }
-                if (piece == 'R')
+                // Shady Line
+                if (piece == 'R' || piece == 'r') // Check for both rooks
                 {
-                    if (current_turn == 'W')
+                    if (piece == 'R') // White Rook
                     {
                         if (i == 7 && j == 0)
                             white_queen_side_rook_moved = true;
                         if (i == 7 && j == 7)
                             white_king_side_rook_moved = true;
                     }
-                    else
+                    else if (piece == 'r') // Black Rook
                     {
                         if (i == 0 && j == 0)
                             black_queen_side_rook_moved = true;
@@ -226,6 +420,14 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                 black_king_moved = bkm;
                 black_king_side_rook_moved = bksrm;
                 black_queen_side_rook_moved = bqsrm;
+
+                // // Compare board after unmaking the move
+                // if (chess_board != temp_board) // Debug Lines
+                // {
+                //     std::cout << "Mismatch detected after unmaking a move at depth " << curr_depth << "!" << std::endl;
+                //     std::cout << "Move attempted: " << piece << " from (" << i << "," << j << ") to (" << new_row << "," << new_col << ")" << std::endl;
+                //     exit(1); // Stop execution if a mismatch is found
+                // }
             }
         }
     }
@@ -291,19 +493,54 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
         }
 
         // en-passant logic
-        if (opp_move_dest_i != -1) // If its game's first move
+        if (opp_move_dest_i != -1) // If it's NOT the first move of the game
         {
-
-            if (piece == 'P' && row == 3 && chess_board[opp_move_dest_i][opp_move_dest_j] == 'p' && opp_move_start_i == 1 && opp_move_dest_i == 3 &&
-                (col == opp_move_dest_j - 1 || col == opp_move_dest_j + 1) && is_legal_after_move(chess_board, row, col, opp_move_dest_i - 1, opp_move_dest_j, player_color))
+            if (piece == 'P' && row == 3 && chess_board[opp_move_dest_i][opp_move_dest_j] == 'p' && opp_move_start_i == 1 &&
+                opp_move_dest_i == 3 && (col == opp_move_dest_j - 1 || col == opp_move_dest_j + 1))
             {
-                moves_generated.push_back(std::to_string(opp_move_dest_i - 1) + "," + std::to_string(opp_move_dest_j) + "ep");
+                // Simulate the en passant move
+                char temp = chess_board[opp_move_dest_i - 1][opp_move_dest_j]; // Store what was there
+                chess_board[opp_move_dest_i][opp_move_dest_j] = '.';           // Remove the captured pawn
+                chess_board[row][col] = '.';                                   // Move the pawn
+                chess_board[opp_move_dest_i - 1][opp_move_dest_j] = 'P';
+
+                // Check if this exposes the king
+                bool is_still_legal = !king_in_check(chess_board, player_color);
+
+                // Undo the move
+                chess_board[opp_move_dest_i][opp_move_dest_j] = 'p';
+                chess_board[row][col] = 'P';
+                chess_board[opp_move_dest_i - 1][opp_move_dest_j] = temp;
+
+                // If the king is not in check, add the move
+                if (is_still_legal)
+                {
+                    moves_generated.push_back(std::to_string(opp_move_dest_i - 1) + "," + std::to_string(opp_move_dest_j) + "ep");
+                }
             }
 
-            if (piece == 'p' && row == 4 && chess_board[opp_move_dest_i][opp_move_dest_j] == 'P' && opp_move_start_i == 6 && opp_move_dest_i == 4 &&
-                (col == opp_move_dest_j - 1 || col == opp_move_dest_j + 1) && is_legal_after_move(chess_board, row, col, opp_move_dest_i + 1, opp_move_dest_j, player_color))
+            if (piece == 'p' && row == 4 && chess_board[opp_move_dest_i][opp_move_dest_j] == 'P' && opp_move_start_i == 6 &&
+                opp_move_dest_i == 4 && (col == opp_move_dest_j - 1 || col == opp_move_dest_j + 1))
             {
-                moves_generated.push_back(std::to_string(opp_move_dest_i + 1) + "," + std::to_string(opp_move_dest_j) + "ep");
+                // Simulate the en passant move
+                char temp = chess_board[opp_move_dest_i + 1][opp_move_dest_j]; // Store what was there
+                chess_board[opp_move_dest_i][opp_move_dest_j] = '.';           // Remove the captured pawn
+                chess_board[row][col] = '.';                                   // Move the pawn
+                chess_board[opp_move_dest_i + 1][opp_move_dest_j] = 'p';
+
+                // Check if this exposes the king
+                bool is_still_legal = !king_in_check(chess_board, player_color);
+
+                // Undo the move
+                chess_board[opp_move_dest_i][opp_move_dest_j] = 'P';
+                chess_board[row][col] = 'p';
+                chess_board[opp_move_dest_i + 1][opp_move_dest_j] = temp;
+
+                // If the king is not in check, add the move
+                if (is_still_legal)
+                {
+                    moves_generated.push_back(std::to_string(opp_move_dest_i + 1) + "," + std::to_string(opp_move_dest_j) + "ep");
+                }
             }
         }
 
