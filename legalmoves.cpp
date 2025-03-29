@@ -58,6 +58,8 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
         return;
     }
 
+    long long int castling_moves = 0; // Unused Variable
+
     // Backup castling rights before this move
     bool wkm = white_king_moved;
     bool wksrm = white_king_side_rook_moved;
@@ -169,7 +171,7 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
 
                 // Count positions for this move
                 unsigned long long move_count = 0;
-                sample_perft_test(target_depth, chess_board, curr_depth + 1, move_count, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w');
+                sample_perft_test(target_depth, chess_board, curr_depth + 1, move_count, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves);
 
                 // Print the perft count for this move
                 if (curr_depth == 1)
@@ -242,7 +244,7 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
     }
 }
 
-void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_board, int curr_depth, unsigned long long int &moves, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, int &ep_moves, char player_turn)
+void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_board, int curr_depth, unsigned long long int &moves, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, int &ep_moves, char player_turn, long long int &castling_moves)
 {
     if (curr_depth > target_depth) // Base Case
     {
@@ -272,8 +274,8 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
             for (int k = 0; k < piece_moves.size(); k++)
             {
                 // std::vector<std::vector<char>> temp_board = chess_board; // Debug Line
-                int new_row = piece_moves[k][0] - '0';                   // Convert char to int
-                int new_col = piece_moves[k][2] - '0';                   // Convert char to int
+                int new_row = piece_moves[k][0] - '0'; // Convert char to int
+                int new_col = piece_moves[k][2] - '0'; // Convert char to int
 
                 char piece = chess_board[i][j];
                 char temp = chess_board[new_row][new_col];
@@ -285,6 +287,12 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                 chess_board[i][j] = '.';
                 char temp2;
                 char temp_castle;
+
+                // Pawn Promotion Move Making Logic
+                if(piece_moves[k].size() == 5 && piece_moves[k][4] == 'P')
+                {
+                    chess_board[new_row][new_col] = piece_moves[k][3];
+                }
 
                 // enapassant move making logic
                 if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'e' && piece_moves[k][4] == 'p')
@@ -300,8 +308,8 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                         temp2 = chess_board[new_row - 1][new_col];
                         chess_board[new_row - 1][new_col] = '.';
                     }
-
-                    ep_moves++;
+                    if (curr_depth == target_depth) // Only Counting Enpassant Moves for the current depth
+                        ep_moves++;
                 }
                 // Castling Move Making Logic
                 if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'c' && (piece_moves[k][4] == 'k' || piece_moves[k][4] == 'q'))
@@ -332,6 +340,9 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                             chess_board[new_row][new_col + 1] = 'r';
                         }
                     }
+
+                    if (curr_depth == target_depth) // Used For Tracking Castling Moves
+                        castling_moves++;
                 }
 
                 // Handle Castling Updates
@@ -361,7 +372,7 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                     }
                 }
 
-                if (curr_depth == target_depth)
+                if (curr_depth == target_depth) // Used For Tracking Overall Moves
                     moves++;
 
                 // if (curr_depth == 1) // Debug Line
@@ -369,7 +380,7 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                 //     std::cout << "\nMove #" << moves << ": " << piece << " from (" << i << "," << j << ") to (" << new_row << "," << new_col << ")" << std::endl<<std::endl;
                 // }
 
-                sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w');
+                sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves);
 
                 chess_board[new_row][new_col] = temp;
                 chess_board[i][j] = piece;
@@ -442,41 +453,130 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
     if (piece == 'P' || piece == 'p')
     {
         // Choosing to move one square forward
-        if ((piece == 'P' && chess_board[row - 1][col] == '.') || (piece == 'p' && chess_board[row + 1][col] == '.'))
+        if ((piece == 'P' && row > 0 && chess_board[row - 1][col] == '.') || (piece == 'p' && row < 7 && chess_board[row + 1][col] == '.'))
         {
-            if (piece == 'P' && is_legal_after_move(chess_board, row, col, row - 1, col, player_color))
+            if (piece == 'P') // White Pawn
             {
-                moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col));
+                if (row == 1) // If moving to rank 8, handle promotion
+                {
+                    if (is_legal_after_move(chess_board, row, col, row - 1, col, player_color))
+                    {
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + ",QP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + ",RP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + ",BP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + ",NP");
+                    }
+                }
+                else // Normal pawn move
+                {
+                    if (is_legal_after_move(chess_board, row, col, row - 1, col, player_color))
+                    {
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col));
+                    }
+                }
             }
 
-            if (piece == 'p' && is_legal_after_move(chess_board, row, col, row + 1, col, player_color))
+            if (piece == 'p') // Black Pawn
             {
-                moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col));
+                if (row == 6) // If moving to rank 1, handle promotion
+                {
+                    if (is_legal_after_move(chess_board, row, col, row + 1, col, player_color))
+                    {
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + ",qP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + ",rP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + ",bP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + ",nP");
+                    }
+                }
+                else // Normal pawn move
+                {
+                    if (is_legal_after_move(chess_board, row, col, row + 1, col, player_color))
+                    {
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col));
+                    }
+                }
             }
         }
+
         // Checking For Captures
-        if ((piece == 'P' && row > 0 && col > 0 && islower(chess_board[row - 1][col - 1]) && is_legal_after_move(chess_board, row, col, row - 1, col - 1, player_color)) ||
-            (piece == 'P' && row > 0 && col < 7 && islower(chess_board[row - 1][col + 1]) && is_legal_after_move(chess_board, row, col, row - 1, col + 1, player_color)) ||
-            (piece == 'p' && row < 7 && col > 0 && isupper(chess_board[row + 1][col - 1]) && is_legal_after_move(chess_board, row, col, row + 1, col - 1, player_color)) ||
-            (piece == 'p' && row < 7 && col < 7 && isupper(chess_board[row + 1][col + 1]) && is_legal_after_move(chess_board, row, col, row + 1, col + 1, player_color)))
+        if (piece == 'P' && row > 0) // White Pawn
         {
-            if (piece == 'P' && row > 0)
-            { // White pawn
-                if (col > 0 && islower(chess_board[row - 1][col - 1]))
+            if (col > 0 && islower(chess_board[row - 1][col - 1])) // Capture left
+            {
+                if (row == 1) // Promotion
+                {
+                    if (is_legal_after_move(chess_board, row, col, row - 1, col - 1, player_color))
+                    {
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + ",QP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + ",RP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + ",BP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + ",NP");
+                    }
+                }
+                else if (is_legal_after_move(chess_board, row, col, row - 1, col - 1, player_color))
+                {
                     moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1));
-
-                if (col < 7 && islower(chess_board[row - 1][col + 1]))
-                    moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1));
+                }
             }
-            if (piece == 'p' && row < 7)
-            { // Black pawn
-                if (col > 0 && isupper(chess_board[row + 1][col - 1]))
-                    moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1));
 
-                if (col < 7 && isupper(chess_board[row + 1][col + 1]))
-                    moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1));
+            if (col < 7 && islower(chess_board[row - 1][col + 1])) // Capture right
+            {
+                if (row == 1) // Promotion
+                {
+                    if (is_legal_after_move(chess_board, row, col, row - 1, col + 1, player_color))
+                    {
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + ",QP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + ",RP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + ",BP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + ",NP");
+                    }
+                }
+                else if (is_legal_after_move(chess_board, row, col, row - 1, col + 1, player_color))
+                {
+                    moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1));
+                }
             }
         }
+
+        if (piece == 'p' && row < 7) // Black Pawn
+        {
+            if (col > 0 && isupper(chess_board[row + 1][col - 1])) // Capture left
+            {
+                if (row == 6) // Promotion
+                {
+                    if (is_legal_after_move(chess_board, row, col, row + 1, col - 1, player_color))
+                    {
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + ",qP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + ",rP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + ",bP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + ",nP");
+                    }
+                }
+                else if (is_legal_after_move(chess_board, row, col, row + 1, col - 1, player_color))
+                {
+                    moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1));
+                }
+            }
+
+            if (col < 7 && isupper(chess_board[row + 1][col + 1])) // Capture right
+            {
+                if (row == 6) // Promotion
+                {
+                    if (is_legal_after_move(chess_board, row, col, row + 1, col + 1, player_color))
+                    {
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + ",qP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + ",rP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + ",bP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + ",nP");
+                    }
+                }
+                else if (is_legal_after_move(chess_board, row, col, row + 1, col + 1, player_color))
+                {
+                    moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1));
+                }
+            }
+        }
+
         // Checking For Two Moves from the Start
         if ((piece == 'P' && row == 6 && chess_board[row - 1][col] == '.' && chess_board[row - 2][col] == '.') ||
             (piece == 'p' && row == 1 && chess_board[row + 1][col] == '.' && chess_board[row + 2][col] == '.'))
