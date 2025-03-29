@@ -135,7 +135,8 @@ void perfsuite_file_test(std::unordered_map<char, std::string> &chess_pieces)
 void compare_perft_results(std::string &board_rep, char player_turn, std::string &castling_rights, std::vector<long long int> &filtered_perft_results, std::unordered_map<char, std::string> &chess_pieces, int test_count)
 {
     unsigned long long int moves = 0; // Stores Moves passed as reference to perft test
-    int ep_moves = 0;
+    int ep_moves = 0; // Tracking En-passant Moves
+    long long int castling_moves = 0; // Tracking Castling Moves
 
     std::ofstream outFile("perft_results.txt", std::ios::app);
     std::vector<std::vector<char>> chess_board(8, std::vector<char>(8, '.')); // Initialized Empty Board
@@ -146,7 +147,7 @@ void compare_perft_results(std::string &board_rep, char player_turn, std::string
 
     for (int depth = 1; depth <= 6; depth++)
     {
-        sample_perft_test(depth, chess_board, 1, moves, -1, -1, -1, -1, ep_moves, player_turn);
+        sample_perft_test(depth, chess_board, 1, moves, -1, -1, -1, -1, ep_moves, player_turn,castling_moves);
         my_perft_results.push_back(moves);
         moves = 0;
     }
