@@ -59,6 +59,7 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
     }
 
     long long int castling_moves = 0; // Unused Variable
+    long long int promotion_moves = 0; // Unused Variable
 
     // Backup castling rights before this move
     bool wkm = white_king_moved;
@@ -95,6 +96,13 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
                 chess_board[new_row][new_col] = piece;
                 chess_board[i][j] = '.';
                 char temp2;
+
+                // Pawn Promotion Move Making Logic
+                if(piece_moves[k].size() == 5 && piece_moves[k][4] == 'P')
+                {
+                    chess_board[new_row][new_col] = piece_moves[k][3];
+                }
+
 
                 // En passant handling
                 if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'e' && piece_moves[k][4] == 'p')
@@ -144,14 +152,14 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
                 }
 
                 // Castling update
-                if (piece == 'K')
+                if (piece == 'K' || piece == 'k')
                 {
                     if (current_turn == 'W')
                         white_king_moved = true;
                     else
                         black_king_moved = true;
                 }
-                if (piece == 'R')
+                if (piece == 'R' || piece == 'r')
                 {
                     if (current_turn == 'W')
                     {
@@ -171,7 +179,7 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
 
                 // Count positions for this move
                 unsigned long long move_count = 0;
-                sample_perft_test(target_depth, chess_board, curr_depth + 1, move_count, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves);
+                sample_perft_test(target_depth, chess_board, curr_depth + 1, move_count, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves,promotion_moves);
 
                 // Print the perft count for this move
                 if (curr_depth == 1)
@@ -244,7 +252,7 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
     }
 }
 
-void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_board, int curr_depth, unsigned long long int &moves, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, int &ep_moves, char player_turn, long long int &castling_moves)
+void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_board, int curr_depth, unsigned long long int &moves, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, int &ep_moves, char player_turn, long long int &castling_moves, long long int &promotion_moves)
 {
     if (curr_depth > target_depth) // Base Case
     {
@@ -292,6 +300,9 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                 if(piece_moves[k].size() == 5 && piece_moves[k][4] == 'P')
                 {
                     chess_board[new_row][new_col] = piece_moves[k][3];
+
+                    if(curr_depth == target_depth) // Counting the total number of promotions occuring
+                        promotion_moves++;
                 }
 
                 // enapassant move making logic
@@ -380,7 +391,7 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                 //     std::cout << "\nMove #" << moves << ": " << piece << " from (" << i << "," << j << ") to (" << new_row << "," << new_col << ")" << std::endl<<std::endl;
                 // }
 
-                sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves);
+                sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves,promotion_moves);
 
                 chess_board[new_row][new_col] = temp;
                 chess_board[i][j] = piece;
@@ -461,10 +472,10 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
                 {
                     if (is_legal_after_move(chess_board, row, col, row - 1, col, player_color))
                     {
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + ",QP"); // 'P' for promotion
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + ",RP");
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + ",BP");
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + ",NP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + "QP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + "RP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + "BP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col) + "NP");
                     }
                 }
                 else // Normal pawn move
@@ -482,10 +493,10 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
                 {
                     if (is_legal_after_move(chess_board, row, col, row + 1, col, player_color))
                     {
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + ",qP"); // 'P' for promotion
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + ",rP");
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + ",bP");
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + ",nP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + "qP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + "rP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + "bP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col) + "nP");
                     }
                 }
                 else // Normal pawn move
@@ -507,10 +518,10 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
                 {
                     if (is_legal_after_move(chess_board, row, col, row - 1, col - 1, player_color))
                     {
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + ",QP"); // 'P' for promotion
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + ",RP");
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + ",BP");
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + ",NP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + "QP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + "RP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + "BP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col - 1) + "NP");
                     }
                 }
                 else if (is_legal_after_move(chess_board, row, col, row - 1, col - 1, player_color))
@@ -525,10 +536,10 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
                 {
                     if (is_legal_after_move(chess_board, row, col, row - 1, col + 1, player_color))
                     {
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + ",QP"); // 'P' for promotion
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + ",RP");
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + ",BP");
-                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + ",NP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + "QP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + "RP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + "BP");
+                        moves_generated.push_back(std::to_string(row - 1) + "," + std::to_string(col + 1) + "NP");
                     }
                 }
                 else if (is_legal_after_move(chess_board, row, col, row - 1, col + 1, player_color))
@@ -546,10 +557,10 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
                 {
                     if (is_legal_after_move(chess_board, row, col, row + 1, col - 1, player_color))
                     {
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + ",qP"); // 'P' for promotion
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + ",rP");
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + ",bP");
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + ",nP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + "qP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + "rP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + "bP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col - 1) + "nP");
                     }
                 }
                 else if (is_legal_after_move(chess_board, row, col, row + 1, col - 1, player_color))
@@ -564,10 +575,10 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
                 {
                     if (is_legal_after_move(chess_board, row, col, row + 1, col + 1, player_color))
                     {
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + ",qP"); // 'P' for promotion
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + ",rP");
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + ",bP");
-                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + ",nP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + "qP"); // 'P' for promotion
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + "rP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + "bP");
+                        moves_generated.push_back(std::to_string(row + 1) + "," + std::to_string(col + 1) + "nP");
                     }
                 }
                 else if (is_legal_after_move(chess_board, row, col, row + 1, col + 1, player_color))

@@ -1,0 +1,504 @@
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♔  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  . ♙ ♟  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♝ ♚  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 8 | Depth 1 (Original): 0
+Depth 2 (Mine): 104 | Depth 2 (Original): 0
+Depth 3 (Mine): 736 | Depth 3 (Original): 0
+Depth 4 (Mine): 9287 | Depth 4 (Original): 0
+Depth 5 (Mine): 62297 | Depth 5 (Original): 0
+Depth 6 (Mine): 824064 | Depth 6 (Original): 824064
+Test #1 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♗ ♔  . 
+ .  .  .  .  .  .  .  . 
+ .  . ♟ ♙  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♚  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 8 | Depth 1 (Original): 0
+Depth 2 (Mine): 104 | Depth 2 (Original): 0
+Depth 3 (Mine): 736 | Depth 3 (Original): 0
+Depth 4 (Mine): 9287 | Depth 4 (Original): 0
+Depth 5 (Mine): 62297 | Depth 5 (Original): 0
+Depth 6 (Mine): 824064 | Depth 6 (Original): 824064
+Test #2 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♔  .  .  .  .  .  . 
+ .  . ♗  .  .  .  .  . 
+ .  . ♙ ♟  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♚  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 14 | Depth 1 (Original): 0
+Depth 2 (Mine): 121 | Depth 2 (Original): 0
+Depth 3 (Mine): 1843 | Depth 3 (Original): 0
+Depth 4 (Mine): 13508 | Depth 4 (Original): 0
+Depth 5 (Mine): 198914 | Depth 5 (Original): 0
+Depth 6 (Mine): 1400374 | Depth 6 (Original): 1440467
+Test #3 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♔  .  . 
+ .  .  .  .  .  .  .  . 
+ .  . ♟ ♙  .  .  .  . 
+ .  . ♝  .  .  .  .  . 
+ . ♚  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 14 | Depth 1 (Original): 0
+Depth 2 (Mine): 121 | Depth 2 (Original): 0
+Depth 3 (Mine): 1843 | Depth 3 (Original): 0
+Depth 4 (Mine): 13508 | Depth 4 (Original): 0
+Depth 5 (Mine): 198914 | Depth 5 (Original): 0
+Depth 6 (Mine): 1400374 | Depth 6 (Original): 1440467
+Test #4 ✅ Complete
+Board Position:
+ .  .  .  .  . ♔  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  . ♚  .  . ♜ 
+
+Perft Results Comparison:
+Depth 1 (Mine): 15 | Depth 1 (Original): 0
+Depth 2 (Mine): 66 | Depth 2 (Original): 0
+Depth 3 (Mine): 1198 | Depth 3 (Original): 0
+Depth 4 (Mine): 6399 | Depth 4 (Original): 0
+Depth 5 (Mine): 120330 | Depth 5 (Original): 0
+Depth 6 (Mine): 661072 | Depth 6 (Original): 661072
+Test #5 ✅ Complete
+Board Position:
+ .  .  .  . ♔  .  . ♖ 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♚  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 15 | Depth 1 (Original): 0
+Depth 2 (Mine): 66 | Depth 2 (Original): 0
+Depth 3 (Mine): 1198 | Depth 3 (Original): 0
+Depth 4 (Mine): 6399 | Depth 4 (Original): 0
+Depth 5 (Mine): 120330 | Depth 5 (Original): 0
+Depth 6 (Mine): 661072 | Depth 6 (Original): 661072
+Test #6 ✅ Complete
+Board Position:
+ .  .  . ♔  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+♜  .  .  . ♚  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 16 | Depth 1 (Original): 0
+Depth 2 (Mine): 71 | Depth 2 (Original): 0
+Depth 3 (Mine): 1286 | Depth 3 (Original): 0
+Depth 4 (Mine): 7418 | Depth 4 (Original): 0
+Depth 5 (Mine): 141077 | Depth 5 (Original): 0
+Depth 6 (Mine): 803711 | Depth 6 (Original): 803711
+Test #7 ✅ Complete
+Board Position:
+♖  .  .  . ♔  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  . ♚  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 16 | Depth 1 (Original): 0
+Depth 2 (Mine): 71 | Depth 2 (Original): 0
+Depth 3 (Mine): 1286 | Depth 3 (Original): 0
+Depth 4 (Mine): 7418 | Depth 4 (Original): 0
+Depth 5 (Mine): 141077 | Depth 5 (Original): 0
+Depth 6 (Mine): 803711 | Depth 6 (Original): 803711
+Test #8 ✅ Complete
+Board Position:
+♖  .  .  . ♔  .  . ♖ 
+ . ♗  .  .  .  . ♗ ♕ 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  . ♝ 
+♜  .  .  . ♚  .  . ♜ 
+
+Perft Results Comparison:
+Depth 1 (Mine): 26 | Depth 1 (Original): 0
+Depth 2 (Mine): 1141 | Depth 2 (Original): 0
+Depth 3 (Mine): 27826 | Depth 3 (Original): 0
+Depth 4 (Mine): 1274206 | Depth 4 (Original): 1274206
+Depth 5 (Mine): 31912360 | Depth 5 (Original): 0
+Depth 6 (Mine): 1509218880 | Depth 6 (Original): -9223359941956549402
+Test #9 ✅ Complete
+Board Position:
+♖  .  .  . ♔  .  . ♖ 
+ .  .  .  .  .  .  . ♗ 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♝  .  .  .  . ♝ ♛ 
+♜  .  .  . ♚  .  . ♜ 
+
+Perft Results Comparison:
+Depth 1 (Mine): 26 | Depth 1 (Original): 0
+Depth 2 (Mine): 1141 | Depth 2 (Original): 0
+Depth 3 (Mine): 27826 | Depth 3 (Original): 0
+Depth 4 (Mine): 1274206 | Depth 4 (Original): 1274206
+Depth 5 (Mine): 31912360 | Depth 5 (Original): 0
+Depth 6 (Mine): 1509218880 | Depth 6 (Original): -9223343449276955629
+Test #10 ✅ Complete
+Board Position:
+♖  .  .  . ♔  .  . ♖ 
+ .  .  .  .  .  .  .  . 
+ .  .  . ♛  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♕  .  . 
+ .  .  .  .  .  .  .  . 
+♜  .  .  . ♚  .  . ♜ 
+
+Perft Results Comparison:
+Depth 1 (Mine): 44 | Depth 1 (Original): 0
+Depth 2 (Mine): 1494 | Depth 2 (Original): 0
+Depth 3 (Mine): 50509 | Depth 3 (Original): 0
+Depth 4 (Mine): 1720476 | Depth 4 (Original): 1720476
+Depth 5 (Mine): 58773923 | Depth 5 (Original): 116
+Depth 6 (Mine): 2010267707 | Depth 6 (Original): -9223364340002798358
+Test #11 ✅ Complete
+Board Position:
+♖  .  .  . ♔  .  . ♖ 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♛  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  . ♕  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+♜  .  .  . ♚  .  . ♜ 
+
+Perft Results Comparison:
+Depth 1 (Mine): 44 | Depth 1 (Original): 0
+Depth 2 (Mine): 1494 | Depth 2 (Original): 0
+Depth 3 (Mine): 50509 | Depth 3 (Original): 0
+Depth 4 (Mine): 1720476 | Depth 4 (Original): 1720476
+Depth 5 (Mine): 58773923 | Depth 5 (Original): 0
+Depth 6 (Mine): 2010267707 | Depth 6 (Original): -9223346747811511270
+Test #12 ✅ Complete
+Board Position:
+ .  . ♚  .  . ♖  .  . 
+ .  .  .  . ♟  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  . ♔  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 11 | Depth 1 (Original): 0
+Depth 2 (Mine): 133 | Depth 2 (Original): 0
+Depth 3 (Mine): 1442 | Depth 3 (Original): 0
+Depth 4 (Mine): 19174 | Depth 4 (Original): 0
+Depth 5 (Mine): 266199 | Depth 5 (Original): 0
+Depth 6 (Mine): 3821001 | Depth 6 (Original): 3821001
+Test #13 ✅ Complete
+Board Position:
+ .  .  . ♚  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  . ♙  .  .  . 
+ .  . ♔  .  . ♜  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 11 | Depth 1 (Original): 0
+Depth 2 (Mine): 133 | Depth 2 (Original): 0
+Depth 3 (Mine): 1242 | Depth 3 (Original): 0
+Depth 4 (Mine): 18183 | Depth 4 (Original): 0
+Depth 5 (Mine): 235130 | Depth 5 (Original): 0
+Depth 6 (Mine): 3660741 | Depth 6 (Original): 3821001
+Test #14 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♟  .  . ♚  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  . ♘  .  .  .  .  . 
+ . ♕  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♔  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 29 | Depth 1 (Original): 0
+Depth 2 (Mine): 165 | Depth 2 (Original): 0
+Depth 3 (Mine): 5160 | Depth 3 (Original): 0
+Depth 4 (Mine): 31961 | Depth 4 (Original): 0
+Depth 5 (Mine): 1004658 | Depth 5 (Original): 0
+Depth 6 (Mine): 6334638 | Depth 6 (Original): 1004658
+Test #15 ✅ Complete
+Board Position:
+ .  .  .  .  . ♚  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♛  .  .  .  .  .  . 
+ .  . ♞  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♙  .  . ♔  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 29 | Depth 1 (Original): 0
+Depth 2 (Mine): 165 | Depth 2 (Original): 0
+Depth 3 (Mine): 5160 | Depth 3 (Original): 0
+Depth 4 (Mine): 31961 | Depth 4 (Original): 0
+Depth 5 (Mine): 1004658 | Depth 5 (Original): 0
+Depth 6 (Mine): 6334638 | Depth 6 (Original): 1004658
+Test #16 ✅ Complete
+Board Position:
+ .  .  .  . ♔  .  .  . 
+ . ♟  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+♚  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 9 | Depth 1 (Original): 0
+Depth 2 (Mine): 40 | Depth 2 (Original): 0
+Depth 3 (Mine): 472 | Depth 3 (Original): 0
+Depth 4 (Mine): 2661 | Depth 4 (Original): 0
+Depth 5 (Mine): 38983 | Depth 5 (Original): 0
+Depth 6 (Mine): 217342 | Depth 6 (Original): 217342
+Test #17 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+♔  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♙  .  .  .  .  .  . 
+ .  .  .  . ♚  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 9 | Depth 1 (Original): 0
+Depth 2 (Mine): 40 | Depth 2 (Original): 0
+Depth 3 (Mine): 472 | Depth 3 (Original): 0
+Depth 4 (Mine): 2661 | Depth 4 (Original): 0
+Depth 5 (Mine): 38983 | Depth 5 (Original): 0
+Depth 6 (Mine): 217342 | Depth 6 (Original): 217342
+Test #18 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+♟  . ♔  .  .  .  .  . 
+♚  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 6 | Depth 1 (Original): 0
+Depth 2 (Mine): 27 | Depth 2 (Original): 0
+Depth 3 (Mine): 273 | Depth 3 (Original): 0
+Depth 4 (Mine): 1329 | Depth 4 (Original): 0
+Depth 5 (Mine): 18135 | Depth 5 (Original): 0
+Depth 6 (Mine): 92683 | Depth 6 (Original): 92683
+Test #19 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+♔  .  .  .  .  .  .  . 
+♙  . ♚  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 6 | Depth 1 (Original): 0
+Depth 2 (Mine): 27 | Depth 2 (Original): 0
+Depth 3 (Mine): 273 | Depth 3 (Original): 0
+Depth 4 (Mine): 1329 | Depth 4 (Original): 0
+Depth 5 (Mine): 18135 | Depth 5 (Original): 0
+Depth 6 (Mine): 92683 | Depth 6 (Original): 92683
+Test #20 ✅ Complete
+Board Position:
+♚  . ♔  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+♟  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 2 | Depth 1 (Original): 0
+Depth 2 (Mine): 6 | Depth 2 (Original): 0
+Depth 3 (Mine): 13 | Depth 3 (Original): 0
+Depth 4 (Mine): 63 | Depth 4 (Original): 0
+Depth 5 (Mine): 382 | Depth 5 (Original): 0
+Depth 6 (Mine): 2217 | Depth 6 (Original): 2217
+Test #21 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+♙  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+♔  . ♚  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 2 | Depth 1 (Original): 0
+Depth 2 (Mine): 6 | Depth 2 (Original): 0
+Depth 3 (Mine): 13 | Depth 3 (Original): 0
+Depth 4 (Mine): 63 | Depth 4 (Original): 0
+Depth 5 (Mine): 382 | Depth 5 (Original): 0
+Depth 6 (Mine): 2217 | Depth 6 (Original): 2217
+Test #22 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+♔  . ♟  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♚  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 10 | Depth 1 (Original): 0
+Depth 2 (Mine): 25 | Depth 2 (Original): 0
+Depth 3 (Mine): 268 | Depth 3 (Original): 0
+Depth 4 (Mine): 926 | Depth 4 (Original): 0
+Depth 5 (Mine): 10857 | Depth 5 (Original): 0
+Depth 6 (Mine): 43261 | Depth 6 (Original): 567584
+Test #23 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ . ♔  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+♚  . ♙  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 10 | Depth 1 (Original): 0
+Depth 2 (Mine): 25 | Depth 2 (Original): 0
+Depth 3 (Mine): 268 | Depth 3 (Original): 0
+Depth 4 (Mine): 926 | Depth 4 (Original): 0
+Depth 5 (Mine): 10857 | Depth 5 (Original): 0
+Depth 6 (Mine): 43261 | Depth 6 (Original): 567584
+Test #24 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  . ♔  .  .  .  .  . 
+ .  .  .  .  . ♕  .  . 
+ .  .  .  .  . ♘  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♚  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 37 | Depth 1 (Original): 0
+Depth 2 (Mine): 183 | Depth 2 (Original): 0
+Depth 3 (Mine): 6559 | Depth 3 (Original): 0
+Depth 4 (Mine): 23527 | Depth 4 (Original): 0
+Depth 5 (Mine): 811573 | Depth 5 (Original): 0
+Depth 6 (Mine): 3114998 | Depth 6 (Original): 23527
+Test #25 ✅ Complete
+Board Position:
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♔  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  . ♞  .  . 
+ .  .  .  .  . ♛  .  . 
+ .  . ♚  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 37 | Depth 1 (Original): 0
+Depth 2 (Mine): 183 | Depth 2 (Original): 0
+Depth 3 (Mine): 6559 | Depth 3 (Original): 0
+Depth 4 (Mine): 23527 | Depth 4 (Original): 0
+Depth 5 (Mine): 811573 | Depth 5 (Original): 0
+Depth 6 (Mine): 3114998 | Depth 6 (Original): 23527
+Test #26 ✅ Complete
+Board Position:
+ .  .  .  . ♔  .  . ♖ 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  . ♚  .  .  . 
+
+Perft Results Comparison:
+Depth 1 (Mine): 15 | Depth 1 (Original): 15
+Depth 2 (Mine): 66 | Depth 2 (Original): 66
+Depth 3 (Mine): 1197 | Depth 3 (Original): 1197
+Depth 4 (Mine): 7059 | Depth 4 (Original): 7059
+Depth 5 (Mine): 133987 | Depth 5 (Original): 133987
+Depth 6 (Mine): 764643 | Depth 6 (Original): 764643
+Test #27 ✅ Complete
+Board Position:
+♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ 
+♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙ 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+ .  .  .  .  .  .  .  . 
+♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟ 
+♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ 
+
+Perft Results Comparison:
+Depth 1 (Mine): 20 | Depth 1 (Original): 20
+Depth 2 (Mine): 400 | Depth 2 (Original): 400
+Depth 3 (Mine): 8902 | Depth 3 (Original): 8902
+Depth 4 (Mine): 197281 | Depth 4 (Original): 197281
+Depth 5 (Mine): 4865609 | Depth 5 (Original): 4865609
+Depth 6 (Mine): 119060324 | Depth 6 (Original): 119060324
+Test #28 ✅ Complete
