@@ -3,6 +3,8 @@
 #include "king_check.h"
 #include "legalmoves.h"
 #include "notations.h"
+#include "Search.h"
+#include "Evaluation.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -783,7 +785,7 @@ bool move_is_legal(std::vector<std::vector<char>> &chess_board, const std::strin
     return false;
 }
 
-void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<char, std::string> &chess_pieces)
+void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<char, std::string> &chess_pieces, char ai_color)
 {
     std::string white_move_start, white_move_dest; // Used Primarily for detecting En-Passant and keeping track of move order
     std::string black_move_start, black_move_dest;
@@ -799,20 +801,31 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
         while (true)
         {
             display_board(chess_board, chess_pieces);
-            std::cout << "\n♔ White's Turn: Pick the piece you want to move (Format: row,col or 'exit' to quit/Resign): ";
-            std::cin >> white_move_start;
-            if (white_move_start == "exit")
+            if (ai_color == 'W')
             {
-                std::cout << "WHite Resigned" << std::endl;
-                goto end; // Exit condition
+                std::cout<<"BOT IS THINKING ...."<<std::endl;
+                std::string computer_move = minimax_driver(4, chess_board, black_move_start[0] - '0', black_move_start[2] - '0', black_move_dest[0] - '0', black_move_dest[2] - '0', ai_color);
+                white_move_start = computer_move.substr(0, 3);
+                white_move_dest = computer_move.substr(4);
             }
-            std::cout << "♔ White's Turn: Pick the destination (Format: row,col): ";
-            std::cin >> white_move_dest;
-            if (white_move_dest == "exit")
+            else
             {
-                std::cout << "white resigned" << std::endl;
-                goto end; // Exit condition
+                std::cout << "\n♔ White's Turn: Pick the piece you want to move (Format: row,col or 'exit' to quit/Resign): ";
+                std::cin >> white_move_start;
+                if (white_move_start == "exit")
+                {
+                    std::cout << "WHite Resigned" << std::endl;
+                    goto end; // Exit condition
+                }
+                std::cout << "♔ White's Turn: Pick the destination (Format: row,col): ";
+                std::cin >> white_move_dest;
+                if (white_move_dest == "exit")
+                {
+                    std::cout << "white resigned" << std::endl;
+                    goto end; // Exit condition
+                }
             }
+
             if (move_is_legal(chess_board, white_move_start, white_move_dest, 'W', black_move_start, black_move_dest, white_king_moved, white_rook_king_side_moved, white_rook_queen_side_moved))
             {
                 std::cout << "✅ White's move executed successfully!\n";
@@ -830,20 +843,32 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
         {
             display_board(chess_board, chess_pieces);
 
-            std::cout << "\n♚ Black's Turn: Pick the piece you want to move (Format: row,col or 'exit' to quit): ";
-            std::cin >> black_move_start;
-            if (black_move_start == "exit")
+            if (ai_color == 'B')
             {
-                std::cout << "Black Resigned" << std::endl;
-                goto end;
+                std::cout<<"BOT IS THINKING ...."<<std::endl;
+                std::string computer_move = minimax_driver(3, chess_board, white_move_start[0] - '0', white_move_start[2] - '0', white_move_dest[0] - '0', white_move_dest[2] - '0', ai_color);
+                black_move_start = computer_move.substr(0, 3);
+                black_move_dest = computer_move.substr(4);
             }
-            std::cout << "♚ Black's Turn: Pick the destination (Format: row,col): ";
-            std::cin >> black_move_dest;
-            if (black_move_dest == "exit")
+
+            else
             {
-                std::cout << "Black Resigned !" << std::endl;
-                goto end;
+                std::cout << "\n♚ Black's Turn: Pick the piece you want to move (Format: row,col or 'exit' to quit): ";
+                std::cin >> black_move_start;
+                if (black_move_start == "exit")
+                {
+                    std::cout << "Black Resigned" << std::endl;
+                    goto end;
+                }
+                std::cout << "♚ Black's Turn: Pick the destination (Format: row,col): ";
+                std::cin >> black_move_dest;
+                if (black_move_dest == "exit")
+                {
+                    std::cout << "Black Resigned !" << std::endl;
+                    goto end;
+                }
             }
+
             if (move_is_legal(chess_board, black_move_start, black_move_dest, 'B', white_move_start, white_move_dest, black_king_moved, black_rook_king_side_moved, black_rook_queen_side_moved))
             {
                 std::cout << "✅ Black's move executed successfully!\n";
@@ -857,7 +882,7 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
         }
     }
 
-    end: // Label for ending execution
+end: // Label for ending execution
 
     std::cout << "Moves Played IN UCI are" << std::endl;
 
@@ -892,13 +917,10 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
     //     std::cout << moves_generated[i] << std::endl;
     // }
 
-
-
-
     char player_color__;
     std::cout << "Choose which side to print all legal moves for either 'W' Or 'B' \n";
     std::cin >> player_color__;
 
-    int total_possible_moves = print_all_legal_moves_for_a_position(chess_board, player_color__,chess_pieces);
-    std::cout << "The Total Count of Possible Moves in the Position are -> " << total_possible_moves<< std::endl;
-    }
+    int total_possible_moves = print_all_legal_moves_for_a_position(chess_board, player_color__, chess_pieces);
+    std::cout << "The Total Count of Possible Moves in the Position are -> " << total_possible_moves << std::endl;
+}

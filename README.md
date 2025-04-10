@@ -1,13 +1,13 @@
 # Chess Game
 
-A console-based Chess Engine implemented in C++, with plans to develop an AI-powered opponent.
+A Chess Engine Under Development in C++, with plans to develop an AI-powered opponent.
 
 ## How to Run
 
 1. Clone the repository.
 2. Compile the C++ files:
    ```bash
-   g++ main.cpp movement.cpp king_check.cpp chessboard.cpp legalmoves.cpp notations.cpp -o chess_game
+   g++ main.cpp movement.cpp king_check.cpp chessboard.cpp legalmoves.cpp notations.cpp hashing.cpp Evaluation.cpp Search.cpp -o chess_game
    ```
 3. Run the executable:
    ```bash
@@ -22,6 +22,7 @@ A console-based Chess Engine implemented in C++, with plans to develop an AI-pow
 - **chessboard.cpp** – Manages board representation, piece placement, and display.
 - **legalmoves.cpp** – Generates all possible legal moves for each piece.
 - **notations.cpp** – Handles chess move notation conversion (e.g., algebraic notation).
+- **hashing.cpp** - Implements Zobrish Hashing For Efficient Lookups
 - **perft_results.txt** – Stores results of performance tests for move generation.
 - **perftsuite.epd** – Test suite of chess positions for verifying move generation accuracy.
 

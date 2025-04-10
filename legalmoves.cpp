@@ -6,8 +6,6 @@
 #include <vector>
 #include <unordered_map>
 
-// TO-DO
-
 // unsigned long long int moves = 0; // Move Tracker
 // long long int depth2_moves = 0;
 bool white_king_moved = false;
@@ -50,7 +48,7 @@ void set_castling_rights(const std::string &castling_rights)
         }
     }
 }
-
+// Function For debugging
 void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board, int curr_depth, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, int &ep_moves, char player_turn)
 {
     if (curr_depth > target_depth)
@@ -58,7 +56,7 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
         return;
     }
 
-    long long int castling_moves = 0; // Unused Variable
+    long long int castling_moves = 0;  // Unused Variable
     long long int promotion_moves = 0; // Unused Variable
 
     // Backup castling rights before this move
@@ -98,11 +96,10 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
                 char temp2;
 
                 // Pawn Promotion Move Making Logic
-                if(piece_moves[k].size() == 5 && piece_moves[k][4] == 'P')
+                if (piece_moves[k].size() == 5 && piece_moves[k][4] == 'P')
                 {
                     chess_board[new_row][new_col] = piece_moves[k][3];
                 }
-
 
                 // En passant handling
                 if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'e' && piece_moves[k][4] == 'p')
@@ -179,7 +176,7 @@ void perft_divide(int target_depth, std::vector<std::vector<char>> &chess_board,
 
                 // Count positions for this move
                 unsigned long long move_count = 0;
-                sample_perft_test(target_depth, chess_board, curr_depth + 1, move_count, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves,promotion_moves);
+                sample_perft_test(target_depth, chess_board, curr_depth + 1, move_count, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves, promotion_moves);
 
                 // Print the perft count for this move
                 if (curr_depth == 1)
@@ -281,15 +278,11 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
 
             for (int k = 0; k < piece_moves.size(); k++)
             {
-                // std::vector<std::vector<char>> temp_board = chess_board; // Debug Line
                 int new_row = piece_moves[k][0] - '0'; // Convert char to int
                 int new_col = piece_moves[k][2] - '0'; // Convert char to int
 
                 char piece = chess_board[i][j];
                 char temp = chess_board[new_row][new_col];
-
-                // //debug line
-                // std::cout << "Checking Move: " << piece << " (" << i << "," << j << ") to (" << new_row << "," << new_col << ")" << std::endl;
 
                 chess_board[new_row][new_col] = piece;
                 chess_board[i][j] = '.';
@@ -297,18 +290,17 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                 char temp_castle;
 
                 // Pawn Promotion Move Making Logic
-                if(piece_moves[k].size() == 5 && piece_moves[k][4] == 'P')
+                if (piece_moves[k].size() == 5 && piece_moves[k][4] == 'P')
                 {
                     chess_board[new_row][new_col] = piece_moves[k][3];
 
-                    if(curr_depth == target_depth) // Counting the total number of promotions occuring
+                    if (curr_depth == target_depth) // Counting the total number of promotions occuring
                         promotion_moves++;
                 }
 
                 // enapassant move making logic
                 if (piece_moves[k].size() == 5 && piece_moves[k][3] == 'e' && piece_moves[k][4] == 'p')
                 {
-                    // temp2 = current_turn == 'W' ? chess_board[new_row + 1][new_col] : chess_board[new_row - 1][new_col];
                     if (current_turn == 'W')
                     {
                         temp2 = chess_board[new_row + 1][new_col];
@@ -386,12 +378,7 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                 if (curr_depth == target_depth) // Used For Tracking Overall Moves
                     moves++;
 
-                // if (curr_depth == 1) // Debug Line
-                // {
-                //     std::cout << "\nMove #" << moves << ": " << piece << " from (" << i << "," << j << ") to (" << new_row << "," << new_col << ")" << std::endl<<std::endl;
-                // }
-
-                sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves,promotion_moves);
+                sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves, promotion_moves);
 
                 chess_board[new_row][new_col] = temp;
                 chess_board[i][j] = piece;
@@ -442,14 +429,6 @@ void sample_perft_test(int target_depth, std::vector<std::vector<char>> &chess_b
                 black_king_moved = bkm;
                 black_king_side_rook_moved = bksrm;
                 black_queen_side_rook_moved = bqsrm;
-
-                // // Compare board after unmaking the move
-                // if (chess_board != temp_board) // Debug Lines
-                // {
-                //     std::cout << "Mismatch detected after unmaking a move at depth " << curr_depth << "!" << std::endl;
-                //     std::cout << "Move attempted: " << piece << " from (" << i << "," << j << ") to (" << new_row << "," << new_col << ")" << std::endl;
-                //     exit(1); // Stop execution if a mismatch is found
-                // }
             }
         }
     }
@@ -654,10 +633,6 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
                 }
             }
         }
-
-        /*
-        Pending Promotion Logic
-        */
     }
 
     // Rooks
@@ -849,6 +824,65 @@ std::vector<std::string> generate_legal_moves_for_a_piece(std::vector<std::vecto
     }
     return moves_generated; // Returns all valid moves for that piece as a vector<string>
 }
+
+bool is_legal_move_available(std::vector<std::vector<char>> &chess_board, char current_turn,int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j)
+{
+    bool t = true;
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            char curr_square = chess_board[i][j];
+
+            if (curr_square == '.' || (current_turn == 'W' && islower(curr_square)) || (current_turn == 'B' && isupper(curr_square)))
+            {
+                continue;
+            }
+
+            std::vector<std::string> moves = generate_legal_moves_for_a_piece(chess_board, 'W', i, j,opp_move_start_i,opp_move_start_j,opp_move_dest_i,opp_move_dest_j,t,t,t,t,t,t); // Extracting Valid moves Per piece
+            if(!moves.empty())
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool is_checkmate(std::vector<std::vector<char>> &chess_board, char current_turn,int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j)
+{
+    // Check if the king is in check.
+    bool is_king_in_check = king_in_check(chess_board,current_turn);
+    
+    // Check if there are any legal moves available.
+    bool legal_moves_available = is_legal_move_available(chess_board, current_turn, opp_move_start_i,opp_move_start_j,opp_move_dest_i,opp_move_dest_j);
+    
+    // If the king is in check and no legal moves are available, it's checkmate.
+    if (is_king_in_check && !legal_moves_available)
+    {
+        return true; // Checkmate
+    }
+
+    return false; // Not checkmate
+}
+
+bool is_stalemate(std::vector<std::vector<char>> &chess_board, char current_turn, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j)
+{
+    // Check if the king is in check.
+    bool is_king_in_check = king_in_check(chess_board, current_turn);
+    
+    // Check if there are any legal moves available.
+    bool legal_moves_available = is_legal_move_available(chess_board, current_turn, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j);
+    
+    // If the king is not in check and no legal moves are available, it's stalemate.
+    if (!is_king_in_check && !legal_moves_available)
+    {
+        return true; // Stalemate
+    }
+
+    return false; // Not stalemate
+}
+
 
 // Under Development
 
