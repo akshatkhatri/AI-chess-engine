@@ -2,6 +2,8 @@
 
 A C++ chess engine under development with support for full chess rules and an AI opponent. It implements move generation, position evaluation, and a minimax search with alpha-beta pruning to choose the best moves. This project is designed to be modular and extensible, making it easy for developers to understand and contribute to each component (board representation, move logic, search, etc.).
 
+[Watch Gameplay Video](./Gameplay_demo/Screen%20Recording%202025-05-01%20112624.mp4)
+
 ## Key Features
 
 - **Legal Move Generation:** Enumerates all legal chess moves for each piece, including special rules (castling, en passant, pawn promotion, etc.). For example, the engine generates pawn promotions by appending promotion designators like “QP”, “RP”, etc. when a pawn reaches the last rank. This ensures the move generator covers cases like promoting to Queen, Rook, Bishop, or Knight.
