@@ -2,7 +2,7 @@
 
 A C++ chess engine under development with support for full chess rules and an AI opponent. It implements move generation, position evaluation, and a minimax search with alpha-beta pruning to choose the best moves. This project is designed to be modular and extensible, making it easy for developers to understand and contribute to each component (board representation, move logic, search, etc.).
 
-[Watch Gameplay Video](./Gameplay_demo/Screen%20Recording%202025-05-01%20112624.mp4)
+[Watch Gameplay Video](./Gameplay_demo/chess_engine_demo_gameplay.mp4)
 
 ## Key Features
 
