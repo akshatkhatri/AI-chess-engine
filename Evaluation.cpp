@@ -8,7 +8,6 @@ const int ROOK_VALUE = 500;
 const int QUEEN_VALUE = 900;
 const int KING_VALUE = 20000;
 
-
 // Evaluation For different Pieces in Different Parts ot the game
 
 const int PAWN_PST_MG[8][8] = {
@@ -198,8 +197,18 @@ bool is_endgame(std::vector<std::vector<char>> &board)
     return false;
 }
 
-int static_evaluate(std::vector<std::vector<char>> &board, char ai_color,char current_turn)
+int static_evaluate(std::vector<std::vector<char>> &board, char ai_color, char current_turn)
 {
+    // const int PAWN_PST_MG[8][8] = {
+    //     {0, 0, 0, 0, 0, 0, 0, 0},
+    //     {50, 50, 50, 50, 50, 50, 50, 50},
+    //     {10, 10, 20, 30, 30, 20, 10, 10},
+    //     {5, 5, 10, 25, 25, 10, 5, 5},
+    //     {0, 0, 0, 20, 20, 0, 0, 0},
+    //     {5, -5, -10, 0, 0, -10, -5, 5},
+    //     {5, 10, 10, -20, -20, 10, 10, 5},
+    //     {0, 0, 0, 0, 0, 0, 0, 0}};
+
     int eval = 0;
     bool endgame = is_endgame(board);
 

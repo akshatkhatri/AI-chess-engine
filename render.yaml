@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: chess-flask
+    env: python
+    buildCommand: "./start.sh"
+    startCommand: "./start.sh"
+    plan: free

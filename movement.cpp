@@ -34,7 +34,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
     // Pawns Logic
     if (piece == 'P' || piece == 'p')
     {
-        std::cout << "Checking pawn Validity" << std::endl;
+        // std::cout << "Checking pawn Validity" << std::endl;
         if (piece == 'P')
         {
             if (start_i <= dest_i)
@@ -58,7 +58,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
             if ((start_i == dest_i + 1 && start_j == dest_j - 1) || (start_i == dest_i + 1 && start_j == dest_j + 1)) // Capture Claimed
             {
                 // Verifying Special Capture (En-Passant)
-                std::cout << "Checking For En-Passant" << std::endl;
+                // std::cout << "Checking For En-Passant" << std::endl;
                 if (!opponent_move_start.empty() && chess_board[opp_dest_i][opp_dest_j] == 'p' && opp_start_i == 1 && opp_dest_i == 3 && dest_j == opp_dest_j && start_i == 3)
                 {
                     char vacant_spot = chess_board[dest_i][dest_j];
@@ -74,7 +74,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
                         chess_board[opp_dest_i][opp_dest_j] = 'p';
                         return false;
                     }
-                    std::cout << "En-Passant Move Executed" << std::endl;
+                    // std::cout << "En-Passant Move Executed" << std::endl;
                     return true;
                 }
 
@@ -178,7 +178,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
             if ((start_i == dest_i - 1 && start_j == dest_j - 1) || (start_i == dest_i - 1 && start_j == dest_j + 1))
             {
                 // Verifying Special Capture (En-Passant)
-                std::cout << "Checking For En-Passant" << std::endl;
+                // std::cout << "Checking For En-Passant" << std::endl;
                 if (!opponent_move_start.empty() && chess_board[opp_dest_i][opp_dest_j] == 'P' && opp_start_i == 6 && opp_dest_i == 4 && dest_j == opp_dest_j && start_i == 4)
                 {
                     char vacant_spot = chess_board[dest_i][dest_j];
@@ -194,7 +194,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
                         chess_board[opp_dest_i][opp_dest_j] = 'p';
                         return false;
                     }
-                    std::cout << "En-Passant Move Executed" << std::endl;
+                    // std::cout << "En-Passant Move Executed" << std::endl;
                     return true;
                 }
 
@@ -618,7 +618,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
         // Checking For King Side Castling(Castling Claimed)
         if (row_diff == 0 && col_diff == 2 && dest_j > start_j && !player_king_moved && !king_side_rook_moved)
         {
-            std::cout << "Checking For King Side Castling(Castling Claimed)" << std::endl;
+            // std::cout << "Checking For King Side Castling(Castling Claimed)" << std::endl;
             // Checking No piece is between the king and the rook
             for (int j = start_j; j < 7; j++)
             {
@@ -641,18 +641,22 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
                 chess_board[start_i][start_j] = piece;
             }
             // Castling Succesful
-            std::cout << "KingSide Castling SUccesful" << std::endl;
+            // std::cout << "KingSide Castling SUccesful" << std::endl;
             chess_board[dest_i][dest_j] = piece;
             chess_board[dest_i][dest_j - 1] = piece == 'K' ? 'R' : 'r';
             chess_board[dest_i][7] = '.';
             chess_board[start_i][start_j] = '.';
+
+            player_king_moved = true;
+            king_side_rook_moved = true;
+
             return true;
         }
 
         // Checking For Queen Side Castling(Castling Claimed)
         if (col_diff == 2 && dest_j < start_j && !player_king_moved && !queen_side_rook_moved)
         {
-            std::cout << "Checking For Queen Side Castling(Castling Claimed)" << std::endl;
+            // std::cout << "Checking For Queen Side Castling(Castling Claimed)" << std::endl;
 
             for (int j = start_j; j > 1; j--)
             {
@@ -682,9 +686,13 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
 
             chess_board[dest_i][dest_j] = piece;
             chess_board[dest_i][dest_j + 1] = piece == 'K' ? 'R' : 'r';
-            std::cout << "KingSide Castling SUccesful" << std::endl;
+            // std::cout << "KingSide Castling SUccesful" << std::endl;
             chess_board[dest_i][0] = '.';
             chess_board[start_i][start_j] = '.';
+
+            player_king_moved = true;
+            queen_side_rook_moved = true;
+
             return true;
         }
         // King can only move one step in any direction
@@ -726,7 +734,7 @@ bool check_piece_legality_and_move(std::vector<std::vector<char>> &chess_board, 
 
 bool move_is_legal(std::vector<std::vector<char>> &chess_board, const std::string &player_move_start, const std::string player_move_dest, char player_color, const std::string opponent_move_start, const std::string opponent_move_dest, bool &player_king_moved, bool &player_king_side_rook_moved, bool &player_queen_side_rook_moved)
 {
-    std::cout << "Checking legality: " << player_move_start << " to " << player_move_dest << std::endl;
+    // std::cout << "Checking legality: " << player_move_start << " to " << player_move_dest << std::endl;
     // Input to be received in format 6,4 to 4,4 for white or 1,4 to 3,4 for black
     if (player_move_start.size() != 3 || player_move_dest.size() != 3)
     {
@@ -772,10 +780,10 @@ bool move_is_legal(std::vector<std::vector<char>> &chess_board, const std::strin
         std::cout << "Invalid Move select your own piece" << std::endl;
         return false;
     }
-    std::cout << "Checking Piece Legality and Move" << std::endl;
+    // std::cout << "Checking Piece Legality and Move" << std::endl;
     if (check_piece_legality_and_move(chess_board, piece_to_move, player_move_start, player_move_dest, opponent_move_start, opponent_move_dest, player_king_moved, player_king_side_rook_moved, player_queen_side_rook_moved))
     {
-        std::cout << "THe move is Valid ... Updating Board...." << std::endl;
+        // std::cout << "THe move is Valid ... Updating Board...." << std::endl;
         return true;
     }
     else
@@ -803,8 +811,8 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
             display_board(chess_board, chess_pieces);
             if (ai_color == 'W')
             {
-                std::cout<<"BOT IS THINKING ...."<<std::endl;
-                std::string computer_move = minimax_driver(4, chess_board, black_move_start[0] - '0', black_move_start[2] - '0', black_move_dest[0] - '0', black_move_dest[2] - '0', ai_color);
+                std::cout << "BOT IS THINKING ...." << std::endl;
+                std::string computer_move = minimax_driver(4, chess_board, black_move_start[0] - '0', black_move_start[2] - '0', black_move_dest[0] - '0', black_move_dest[2] - '0', ai_color,white_king_moved,white_rook_king_side_moved,white_rook_queen_side_moved,black_king_moved,black_rook_king_side_moved,black_rook_queen_side_moved);
                 white_move_start = computer_move.substr(0, 3);
                 white_move_dest = computer_move.substr(4);
             }
@@ -845,8 +853,8 @@ void start_game(std::vector<std::vector<char>> &chess_board, std::unordered_map<
 
             if (ai_color == 'B')
             {
-                std::cout<<"BOT IS THINKING ...."<<std::endl;
-                std::string computer_move = minimax_driver(3, chess_board, white_move_start[0] - '0', white_move_start[2] - '0', white_move_dest[0] - '0', white_move_dest[2] - '0', ai_color);
+                std::cout << "BOT IS THINKING ...." << std::endl;
+                std::string computer_move = minimax_driver(3, chess_board, white_move_start[0] - '0', white_move_start[2] - '0', white_move_dest[0] - '0', white_move_dest[2] - '0', ai_color,white_king_moved,white_rook_king_side_moved,white_rook_queen_side_moved,black_king_moved,black_rook_king_side_moved,black_rook_queen_side_moved);
                 black_move_start = computer_move.substr(0, 3);
                 black_move_dest = computer_move.substr(4);
             }

@@ -905,6 +905,7 @@ int print_all_legal_moves_for_a_position(std::vector<std::vector<char>> &chess_b
 
                 for (int k = 0; k < moves.size(); k++) // Printing Moves
                 {
+                    std::cout<<moves[k]<<" ";
                     std::cout << convert_indices_to_UCI(std::to_string(i) + "," + std::to_string(j), moves[k]) << " ";
                 }
                 if (moves.size() == 0)

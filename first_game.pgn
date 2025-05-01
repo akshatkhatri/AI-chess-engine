@@ -1,0 +1,23 @@
+[Event "Computer chess game"]
+[Site "PANDEMIC_PANDA"]
+[Date "2025.04.11"]
+[Round "?"]
+[White "Chess_game"]
+[Black "jitik"]
+[Result "0-1"]
+[BlackElo "2400"]
+[ECO "C25"]
+[Opening "Vienna"]
+[Time "10:40:21"]
+[Variation "2...Bb4"]
+[WhiteElo "2000"]
+[Termination "time forfeit"]
+[PlyCount "34"]
+[WhiteType "program"]
+[BlackType "human"]
+
+1. e4 e5 2. Nc3 Bb4 3. Nd5 d6 4. Nxb4 Be6 5. Nf3 f6 6. Bb5+ c6 7. Be2 Nd7
+8. O-O a5 9. Nd3 Ne7 10. a3 b5 11. a4 bxa4 12. Rxa4 O-O 13. c3 f5 14. Ng5
+Bf7 15. Bf3 fxe4 16. Bxe4 Bg6 17. Ne6 Qb8 18. ... {White forfeits on time}
+0-1
+

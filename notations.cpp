@@ -15,10 +15,10 @@ std::string convert_indices_to_UCI(std::string move_start, std::string move_dest
     int row_index_dest = move_dest[0] - '0';
     int col_index_dest = move_dest[2] - '0';
 
-    char col_start_UCI = 'A' + col_index_start; // e
+    char col_start_UCI = 'a' + col_index_start; // e
     int row_start_UCI = 8 - row_index_start;    // 2
 
-    char col_dest_UCI = 'A' + col_index_dest; // e
+    char col_dest_UCI = 'a' + col_index_dest; // e
     int row_dest_UCI = 8 - row_index_dest;    // 4
 
     return col_start_UCI + std::to_string(row_start_UCI) + col_dest_UCI + std::to_string(row_dest_UCI); // e2e4
@@ -30,10 +30,10 @@ std::string convert_UCI_to_indices(std::string UCI_move) // e2e4 → 6,4|4,4
     char col_dest_UCI = UCI_move[2];       // 'e'
     int row_dest_UCI = UCI_move[3] - '0';  // 4
 
-    int col_start_idx = col_start_UCI - 'A'; // Convert 'E' -> 4
+    int col_start_idx = col_start_UCI - 'a'; // Convert 'e' -> 4
     int row_start_idx = 8 - row_start_UCI;   // Convert 2 -> 6
 
-    int col_dest_idx = col_dest_UCI - 'A'; // Convert 'E'-> 4
+    int col_dest_idx = col_dest_UCI - 'a'; // Convert 'e'-> 4
     int row_dest_idx = 8 - row_dest_UCI;   // Convert 4 -> 4
 
     return std::to_string(row_start_idx) + "," + std::to_string(col_start_idx) + "|" + std::to_string(row_dest_idx) + "," + std::to_string(col_dest_idx);
@@ -67,18 +67,47 @@ void construct_board_from_fen(std::vector<std::vector<char>> &board, std::string
         }
     }
 
-    // Uncomment below to Print Board
+    // Uncomment below to Print Board in the Perftsuite FIle
 
-    outFile << "Board Position:\n";
-    for (int i = 0; i < board.size(); i++)
+    // outFile << "Board Position:\n";
+    // for (int i = 0; i < board.size(); i++)
+    // {
+    //     for (int j = 0; j < board[0].size(); j++)
+    //     {
+    //         outFile << std::setw(2) << (board[i][j] != '.' ? chess_pieces[board[i][j]] : ".") << " ";
+    //     }
+    //     outFile << "\n";
+    // }
+    // outFile << "\n";
+}
+
+void construct_board_from_fen(std::vector<std::vector<char>> &board, std::string &fen)
+{
+    int row = 0;
+    int col = 0;
+
+    for (int i = 0; i < fen.size(); i++)
     {
-        for (int j = 0; j < board[0].size(); j++)
+        if (isdigit(fen[i]))
         {
-            outFile << std::setw(2) << (board[i][j] != '.' ? chess_pieces[board[i][j]] : ".") << " ";
+            int empty_squares = fen[i] - '0';
+            for (int j = 0; j < empty_squares; j++)
+            {
+                board[row][col] = '.'; // Ensure it's explicitly set to '.'
+                col++;
+            }
         }
-        outFile << "\n";
+        else if (fen[i] == '/')
+        {
+            row++;
+            col = 0;
+        }
+        else
+        {
+            board[row][col] = fen[i];
+            col++;
+        }
     }
-    outFile << "\n";
 }
 
 void perfsuite_file_test(std::unordered_map<char, std::string> &chess_pieces)

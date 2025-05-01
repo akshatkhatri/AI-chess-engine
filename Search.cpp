@@ -4,15 +4,11 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include<climits>
 
-bool white_king_moved_ = false;
-bool white_king_side_rook_moved_ = false;
-bool white_queen_side_rook_moved_ = false;
-bool black_king_moved_ = false;
-bool black_king_side_rook_moved_ = false;
-bool black_queen_side_rook_moved_ = false;
 
-std::string minimax_driver(int target_depth, std::vector<std::vector<char>> &chess_board, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, char current_turn)
+
+std::string minimax_driver(int target_depth, std::vector<std::vector<char>> &chess_board, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, char current_turn, bool &_white_king_moved, bool &_white_king_side_rook_moved, bool &_white_queen_side_rook_moved, bool &_black_king_moved, bool &_black_king_side_rook_moved, bool &_black_queen_side_rook_moved)
 {
     int best_move_start_i = -1;
     int best_move_start_j = -1;
@@ -22,12 +18,12 @@ std::string minimax_driver(int target_depth, std::vector<std::vector<char>> &che
     int BEST_SCORE = INT_MIN; // equivalent to minus infinity
 
     // Backup castling rights before this move
-    bool wkm = white_king_moved_;
-    bool wksrm = white_king_side_rook_moved_;
-    bool wqsrm = white_queen_side_rook_moved_;
-    bool bkm = black_king_moved_;
-    bool bksrm = black_king_side_rook_moved_;
-    bool bqsrm = black_queen_side_rook_moved_;
+    bool wkm = _white_king_moved;
+    bool wksrm = _white_king_side_rook_moved;
+    bool wqsrm = _white_queen_side_rook_moved;
+    bool bkm = _black_king_moved;
+    bool bksrm = _black_king_side_rook_moved;
+    bool bqsrm = _black_queen_side_rook_moved;
 
     for (int i = 0; i < 8; i++)
     {
@@ -40,7 +36,7 @@ std::string minimax_driver(int target_depth, std::vector<std::vector<char>> &che
             {
                 continue;
             }
-            std::vector<std::string> piece_moves = generate_legal_moves_for_a_piece(chess_board, current_turn, i, j, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j, white_king_moved_, white_king_side_rook_moved_, white_queen_side_rook_moved_, black_king_moved_, black_king_side_rook_moved_, black_queen_side_rook_moved_);
+            std::vector<std::string> piece_moves = generate_legal_moves_for_a_piece(chess_board, current_turn, i, j, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j, _white_king_moved, _white_king_side_rook_moved, _white_queen_side_rook_moved, _black_king_moved, _black_king_side_rook_moved,_black_queen_side_rook_moved);
 
             for (int k = 0; k < piece_moves.size(); k++)
             {
@@ -110,9 +106,9 @@ std::string minimax_driver(int target_depth, std::vector<std::vector<char>> &che
                 if (piece == 'K' || piece == 'k') // Check for both kings
                 {
                     if (piece == 'K') // White King
-                        white_king_moved_ = true;
+                        _white_king_moved = true;
                     else if (piece == 'k') // Black King
-                        black_king_moved_ = true;
+                        _black_king_moved = true;
                 }
                 // Shady Line
                 if (piece == 'R' || piece == 'r') // Check for both rooks
@@ -120,23 +116,23 @@ std::string minimax_driver(int target_depth, std::vector<std::vector<char>> &che
                     if (piece == 'R') // White Rook
                     {
                         if (i == 7 && j == 0)
-                            white_queen_side_rook_moved_ = true;
+                            _white_queen_side_rook_moved = true;
                         if (i == 7 && j == 7)
-                            white_king_side_rook_moved_ = true;
+                            _white_king_side_rook_moved = true;
                     }
                     else if (piece == 'r') // Black Rook
                     {
 
                         if (i == 0 && j == 0)
-                            black_queen_side_rook_moved_ = true;
+                           _black_queen_side_rook_moved = true;
                         if (i == 0 && j == 7)
-                            black_king_side_rook_moved_ = true;
+                            _black_king_side_rook_moved = true;
                     }
                 }
 
                 // sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves,promotion_moves);
-                bool maximizingPlayer = (current_turn == 'W') ? true : false; // AI's turn is maximizing or minimizing
-                int score = minimax(chess_board, target_depth, INT_MIN, INT_MAX, !maximizingPlayer, (current_turn == 'W') ? 'B' : 'W', current_turn, i, j, new_row, new_col);
+                // bool maximizingPlayer = (current_turn == 'W') ? true : false; // AI's turn is maximizing or minimizing
+                int score = minimax(chess_board, target_depth, INT_MIN, INT_MAX, false, (current_turn == 'W') ? 'B' : 'W', current_turn, i, j, new_row, new_col,_white_king_moved,_white_king_side_rook_moved,_white_queen_side_rook_moved,_black_king_moved,_black_king_moved,_black_queen_side_rook_moved);
 
                 chess_board[new_row][new_col] = temp;
                 chess_board[i][j] = piece;
@@ -181,20 +177,17 @@ std::string minimax_driver(int target_depth, std::vector<std::vector<char>> &che
                     }
                 }
 
-                white_king_moved_ = wkm;
-                white_king_side_rook_moved_ = wksrm;
-                white_queen_side_rook_moved_ = wqsrm;
-                black_king_moved_ = bkm;
-                black_king_side_rook_moved_ = bksrm;
-                black_queen_side_rook_moved_ = bqsrm;
+                _white_king_moved = wkm;
+                _white_king_side_rook_moved = wksrm;
+                _white_queen_side_rook_moved = wqsrm;
+                _black_king_moved = bkm;
+                _black_king_side_rook_moved = bksrm;
+                _black_queen_side_rook_moved = bqsrm;
 
                 // std::cout<<score<<std::endl;
 
                 if (score > BEST_SCORE) // Candidate Best Score And Move
                 {
-                    std::cout << "Found" << std::endl;
-                    std::cout << score << std::endl;
-                    std::cout << "Highest Evaluation Till now -> " << BEST_SCORE << std::endl;
                     BEST_SCORE = score;
                     best_move_start_i = i;
                     best_move_start_j = j;
@@ -204,11 +197,11 @@ std::string minimax_driver(int target_depth, std::vector<std::vector<char>> &che
             }
         }
     }
-    std::cout << "Best Evaluation Possible -> " << BEST_SCORE << std::endl;
+    // std::cout << "Best Evaluation Possible -> " << BEST_SCORE << std::endl;
     return std::to_string(best_move_start_i) + "," + std::to_string(best_move_start_j) + "|" + std::to_string(best_move_dest_i) + "," + std::to_string(best_move_dest_j);
 }
 
-int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, int beta, bool maximizing_player, char current_turn, char ai_color, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j)
+int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, int beta, bool maximizing_player, char current_turn, char ai_color, int opp_move_start_i, int opp_move_start_j, int opp_move_dest_i, int opp_move_dest_j, bool &_white_king_moved, bool &_white_king_side_rook_moved, bool &_white_queen_side_rook_moved, bool &_black_king_moved, bool &_black_king_side_rook_moved, bool &_black_queen_side_rook_moved)
 {
     // std::cout<<"Here"<<std::endl;
     if (depth == 0 || is_checkmate(chess_board, current_turn, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j) || is_stalemate(chess_board, current_turn, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j)) // Base Case
@@ -217,12 +210,12 @@ int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, i
     }
 
     // Backup castling rights before this move
-    bool wkm = white_king_moved_;
-    bool wksrm = white_king_side_rook_moved_;
-    bool wqsrm = white_queen_side_rook_moved_;
-    bool bkm = black_king_moved_;
-    bool bksrm = black_king_side_rook_moved_;
-    bool bqsrm = black_queen_side_rook_moved_;
+    bool wkm = _white_king_moved;
+    bool wksrm = _white_king_side_rook_moved;
+    bool wqsrm = _white_queen_side_rook_moved;
+    bool bkm = _black_king_moved;
+    bool bksrm = _black_king_side_rook_moved;
+    bool bqsrm = _black_queen_side_rook_moved;
 
     if (maximizing_player)
     {
@@ -238,7 +231,7 @@ int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, i
                 {
                     continue;
                 }
-                std::vector<std::string> piece_moves = generate_legal_moves_for_a_piece(chess_board, current_turn, i, j, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j, white_king_moved_, white_king_side_rook_moved_, white_queen_side_rook_moved_, black_king_moved_, black_king_side_rook_moved_, black_queen_side_rook_moved_);
+                std::vector<std::string> piece_moves = generate_legal_moves_for_a_piece(chess_board, current_turn, i, j, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j, _white_king_moved, _white_king_side_rook_moved, _white_queen_side_rook_moved, _black_king_moved, _black_king_side_rook_moved,_black_queen_side_rook_moved);
 
                 for (int k = 0; k < piece_moves.size(); k++)
                 {
@@ -308,9 +301,9 @@ int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, i
                     if (piece == 'K' || piece == 'k') // Check for both kings
                     {
                         if (piece == 'K') // White King
-                            white_king_moved_ = true;
+                            _white_king_moved = true;
                         else if (piece == 'k') // Black King
-                            black_king_moved_ = true;
+                            _black_king_moved = true;
                     }
                     // Shady Line
                     if (piece == 'R' || piece == 'r') // Check for both rooks
@@ -318,21 +311,21 @@ int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, i
                         if (piece == 'R') // White Rook
                         {
                             if (i == 7 && j == 0)
-                                white_queen_side_rook_moved_ = true;
+                                _white_queen_side_rook_moved = true;
                             if (i == 7 && j == 7)
-                                white_king_side_rook_moved_ = true;
+                                _white_king_side_rook_moved = true;
                         }
                         else if (piece == 'r') // Black Rook
                         {
                             if (i == 0 && j == 0)
-                                black_queen_side_rook_moved_ = true;
+                               _black_queen_side_rook_moved = true;
                             if (i == 0 && j == 7)
-                                black_king_side_rook_moved_ = true;
+                                _black_king_side_rook_moved = true;
                         }
                     }
 
                     // sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves, promotion_moves);
-                    int eval = minimax(chess_board, depth - 1, alpha, beta, false, (current_turn == 'W') ? 'B' : 'W', ai_color, i, j, new_row, new_col);
+                    int eval = minimax(chess_board, depth - 1, alpha, beta, false, (current_turn == 'W') ? 'B' : 'W', ai_color, i, j, new_row, new_col,_white_king_moved,_white_king_side_rook_moved,_white_queen_side_rook_moved,_black_king_moved,_black_king_side_rook_moved,_black_queen_side_rook_moved);
                     // std::cout<<eval<<std::endl;
                     chess_board[new_row][new_col] = temp;
                     chess_board[i][j] = piece;
@@ -377,12 +370,12 @@ int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, i
                         }
                     }
 
-                    white_king_moved_ = wkm;
-                    white_king_side_rook_moved_ = wksrm;
-                    white_queen_side_rook_moved_ = wqsrm;
-                    black_king_moved_ = bkm;
-                    black_king_side_rook_moved_ = bksrm;
-                    black_queen_side_rook_moved_ = bqsrm;
+                    _white_king_moved = wkm;
+                    _white_king_side_rook_moved = wksrm;
+                    _white_queen_side_rook_moved = wqsrm;
+                    _black_king_moved = bkm;
+                    _black_king_side_rook_moved = bksrm;
+                    _black_queen_side_rook_moved = bqsrm;
 
                     max_eval = std::max(max_eval, eval);
                     alpha = std::max(alpha, eval);
@@ -407,7 +400,7 @@ int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, i
                 {
                     continue;
                 }
-                std::vector<std::string> piece_moves = generate_legal_moves_for_a_piece(chess_board, current_turn, i, j, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j, white_king_moved_, white_king_side_rook_moved_, white_queen_side_rook_moved_, black_king_moved_, black_king_side_rook_moved_, black_queen_side_rook_moved_);
+                std::vector<std::string> piece_moves = generate_legal_moves_for_a_piece(chess_board, current_turn, i, j, opp_move_start_i, opp_move_start_j, opp_move_dest_i, opp_move_dest_j, _white_king_moved, _white_king_side_rook_moved, _white_queen_side_rook_moved, _black_king_moved, _black_king_side_rook_moved,_black_queen_side_rook_moved);
 
                 for (int k = 0; k < piece_moves.size(); k++)
                 {
@@ -477,9 +470,9 @@ int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, i
                     if (piece == 'K' || piece == 'k') // Check for both kings
                     {
                         if (piece == 'K') // White King
-                            white_king_moved_ = true;
+                            _white_king_moved = true;
                         else if (piece == 'k') // Black King
-                            black_king_moved_ = true;
+                            _black_king_moved = true;
                     }
                     // Shady Line
                     if (piece == 'R' || piece == 'r') // Check for both rooks
@@ -487,21 +480,21 @@ int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, i
                         if (piece == 'R') // White Rook
                         {
                             if (i == 7 && j == 0)
-                                white_queen_side_rook_moved_ = true;
+                                _white_queen_side_rook_moved = true;
                             if (i == 7 && j == 7)
-                                white_king_side_rook_moved_ = true;
+                                _white_king_side_rook_moved = true;
                         }
                         else if (piece == 'r') // Black Rook
                         {
                             if (i == 0 && j == 0)
-                                black_queen_side_rook_moved_ = true;
+                               _black_queen_side_rook_moved = true;
                             if (i == 0 && j == 7)
-                                black_king_side_rook_moved_ = true;
+                                _black_king_side_rook_moved = true;
                         }
                     }
 
                     // sample_perft_test(target_depth, chess_board, curr_depth + 1, moves, i, j, new_row, new_col, ep_moves, (player_turn == 'w') ? 'b' : 'w', castling_moves, promotion_moves);
-                    int eval = minimax(chess_board, depth - 1, alpha, beta, true, (current_turn == 'W') ? 'B' : 'W', ai_color, i, j, new_row, new_col);
+                    int eval = minimax(chess_board, depth - 1, alpha, beta, true, (current_turn == 'W') ? 'B' : 'W', ai_color, i, j, new_row, new_col,_white_king_moved,_white_king_side_rook_moved,_white_queen_side_rook_moved,_black_king_moved,_black_king_side_rook_moved,_black_queen_side_rook_moved);
                     // std::cout<<eval<<std::endl;
 
                     chess_board[new_row][new_col] = temp;
@@ -547,12 +540,12 @@ int minimax(std::vector<std::vector<char>> &chess_board, int depth, int alpha, i
                         }
                     }
 
-                    white_king_moved_ = wkm;
-                    white_king_side_rook_moved_ = wksrm;
-                    white_queen_side_rook_moved_ = wqsrm;
-                    black_king_moved_ = bkm;
-                    black_king_side_rook_moved_ = bksrm;
-                    black_queen_side_rook_moved_ = bqsrm;
+                    _white_king_moved = wkm;
+                    _white_king_side_rook_moved = wksrm;
+                    _white_queen_side_rook_moved = wqsrm;
+                    _black_king_moved = bkm;
+                    _black_king_side_rook_moved = bksrm;
+                    _black_queen_side_rook_moved = bqsrm;
 
                     min_eval = std::min(min_eval, eval);
                     beta = std::min(beta, eval);
